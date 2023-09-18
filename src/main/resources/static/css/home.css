@@ -1,0 +1,32 @@
+main {
+    height: 150vh;
+}
+
+#home-sidebar {
+    background-color: #b5dcdd;
+    width: 20vw;
+    height: 75vh;
+    position: fixed;
+}
+
+#home-sidebar > h4 {
+    margin: 2vh 1vw;
+}
+
+#home-top-bar {
+    background-color: #b5dcdd;
+    height: 10vh;
+    position: fixed;
+}
+
+#home-main-content {
+    width: 80vw;
+    position: absolute;
+    right: 0;
+    padding: 5vh 5vw;
+}
+
+#home-main-content > h4 {
+    text-align: center;
+    color: #2c6b96;
+}
