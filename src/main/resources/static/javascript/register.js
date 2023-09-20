@@ -9,11 +9,11 @@ document.getElementById('register-error-text').textContent = ''
 async function handleRegister(e) {
     e.preventDefault();
 
-    document.getElementById('register-first-name-input').style.borderColor = "black"
-    document.getElementById('register-last-name-input').style.borderColor = "black"
-    document.getElementById('register-email-input').style.borderColor = "black"
-    document.getElementById('register-password-input').style.borderColor = "black"
-    document.getElementById('register-password-confirm').style.borderColor = "black"
+    document.getElementById('register-first-name-input').style.borderColor = "gray"
+    document.getElementById('register-last-name-input').style.borderColor = "gray"
+    document.getElementById('register-email-input').style.borderColor = "gray"
+    document.getElementById('register-password-input').style.borderColor = "gray"
+    document.getElementById('register-password-confirm').style.borderColor = "gray"
 
     document.getElementById('register-error-text').textContent = ''
 
@@ -72,8 +72,6 @@ async function handleRegister(e) {
     })
     .catch(err => console.log(err))
 
-    const responseArr = await response.json();
-
     if (response.status === 200) {
         if (document.cookie) {
             let c = document.cookie.split(';')
@@ -84,7 +82,8 @@ async function handleRegister(e) {
 
         location.replace('./login.html')
     } else {
-        alert(`Error in registration: ${response.status}`)
+        document.getElementById('register-email-input').style.borderColor = "red"
+        document.getElementById('register-error-text').textContent = 'Email is already in use.'
     }
 }
 

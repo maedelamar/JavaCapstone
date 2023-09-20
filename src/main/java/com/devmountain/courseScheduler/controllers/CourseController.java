@@ -1,12 +1,17 @@
 package com.devmountain.courseScheduler.controllers;
 
 import com.devmountain.courseScheduler.dtos.CourseDto;
+import com.devmountain.courseScheduler.dtos.StudentDto;
+import com.devmountain.courseScheduler.entities.User;
+import com.devmountain.courseScheduler.repositories.UserRepository;
 import com.devmountain.courseScheduler.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/courses")
@@ -42,5 +47,10 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public Optional<CourseDto> getCourseById(@PathVariable Long courseId) {
         return courseService.getCourseById(courseId);
+    }
+
+    @GetMapping("/number/highest")
+    public Long getHighestCourseNumber() {
+        return courseService.getHighestCourseNumber();
     }
 }

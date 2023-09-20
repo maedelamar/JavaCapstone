@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
             if (passwordEncoder.matches(userDto.getPassword(), userOptional.get().getPassword())) {
                 response.add("User Login Successful");
                 response.add(String.valueOf(userOptional.get().getId()));
+                response.add(String.valueOf(userOptional.get().getPermission()));
             } else {
                 response.add("Email or Password Incorrect");
             }
@@ -80,6 +81,19 @@ public class UserServiceImpl implements UserService {
             userRepository.saveAndFlush(user);
         });
         response.add("User Updated");
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public List<String> updateUserPermission(Long userId, Integer permission) {
+        List<String> response = new ArrayList<>();
+        Optional<User> userOptional = userRepository.findById((userId));
+        userOptional.ifPresent(user -> {
+            user.setPermission(permission);
+            userRepository.saveAndFlush(user);
+        });
+        response.add("Permission Updated");
         return response;
     }
 

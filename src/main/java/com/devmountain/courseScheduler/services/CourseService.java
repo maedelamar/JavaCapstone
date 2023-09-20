@@ -21,4 +21,6 @@ public interface CourseService {
     List<CourseDto> getCoursesByInstructor(Long instructorId);
 
     Optional<CourseDto> getCourseById(Long courseId);
+
+    Long getHighestCourseNumber();
 }

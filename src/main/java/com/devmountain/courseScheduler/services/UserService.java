@@ -12,6 +12,8 @@ public interface UserService {
 
     List<String> updateUser(UserDto userDto);
 
+    List<String> updateUserPermission(Long userId, Integer permission);
+
     List<String> deleteUserById(Long userId);
 
     List<UserDto> getAllUsers();

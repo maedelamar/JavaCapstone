@@ -75,7 +75,8 @@ public class CourseServiceImpl implements CourseService {
             course.setNumber(course.getNumber());
             course.setCategory(course.getCategory());
             course.setSize(course.getSize());
-            course.setTime(course.getTime());
+            course.setStartTime(course.getStartTime());
+            course.setEndTime(course.getEndTime());
             course.setLocation(course.getLocation());
             courseRepository.saveAndFlush(course);
         });
@@ -110,5 +111,23 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public Long getHighestCourseNumber() {
+        List<CourseDto> courseDtos = getAllCourses();
+
+        if (courseDtos.isEmpty()) {
+            return 0L;
+        }
+
+        Long maxNum = courseDtos.get(0).getNumber();
+        for (CourseDto courseDto : courseDtos) {
+            if (courseDto.getNumber() > maxNum) {
+                maxNum = courseDto.getNumber();
+            }
+        }
+
+        return maxNum;
     }
 }

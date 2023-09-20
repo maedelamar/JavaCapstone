@@ -35,6 +35,11 @@ public class UserController {
         return userService.updateUser(userDto);
     }
 
+    @PutMapping("/permission/{userId}/{newPermission}")
+    public List<String> updateUserPermission(@PathVariable Long userId, @PathVariable Integer newPermission) {
+        return userService.updateUserPermission(userId, newPermission);
+    }
+
     @DeleteMapping("/{userId}")
     public List<String> deleteUserById(@PathVariable Long userId) {
         return userService.deleteUserById(userId);

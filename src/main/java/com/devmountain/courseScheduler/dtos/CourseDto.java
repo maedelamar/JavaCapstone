@@ -17,7 +17,8 @@ public class CourseDto {
     private Long number;
     private String category;
     private Integer size;
-    private LocalDateTime time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String location;
 
     public CourseDto(Course course) {
@@ -39,8 +40,11 @@ public class CourseDto {
         if (course.getSize() != null) {
             this.size = course.getSize();
         }
-        if (course.getTime() != null) {
-            this.time = course.getTime();
+        if (course.getStartTime() != null) {
+            this.startTime = course.getStartTime();
+        }
+        if (course.getEndTime() != null) {
+            this.endTime = course.getEndTime();
         }
         if (course.getLocation() != null) {
             this.location = course.getLocation();

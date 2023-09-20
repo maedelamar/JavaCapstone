@@ -1,6 +1,7 @@
 package com.devmountain.courseScheduler.repositories;
 
 import com.devmountain.courseScheduler.entities.Course;
+import com.devmountain.courseScheduler.entities.Student;
 import com.devmountain.courseScheduler.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

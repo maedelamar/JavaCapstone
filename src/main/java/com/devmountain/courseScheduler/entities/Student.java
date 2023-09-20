@@ -41,5 +41,8 @@ public class Student {
         if (studentDto.getRating() != null) {
             this.rating = studentDto.getRating();
         }
+        if (studentDto.getCourse() != null) {
+            this.course = studentDto.getCourse();
+        }
     }
 }

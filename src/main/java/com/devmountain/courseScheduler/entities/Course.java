@@ -38,7 +38,10 @@ public class Course {
     private Integer size;
 
     @Column
-    private LocalDateTime time;
+    private LocalDateTime startTime;
+
+    @Column
+    private LocalDateTime endTime;
 
     @Column
     private String location;
@@ -74,8 +77,11 @@ public class Course {
         if (courseDto.getSize() != null) {
             this.size = courseDto.getSize();
         }
-        if (courseDto.getTime() != null) {
-            this.time = courseDto.getTime();
+        if (courseDto.getStartTime() != null) {
+            this.startTime = courseDto.getStartTime();
+        }
+        if (courseDto.getEndTime() != null) {
+            this.endTime = courseDto.getEndTime();
         }
         if (courseDto.getLocation() != null) {
             this.location = courseDto.getLocation();

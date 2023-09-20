@@ -1,32 +1,159 @@
-main {
-    height: 150vh;
-}
-
 #home-sidebar {
     background-color: #b5dcdd;
-    width: 20vw;
+    width: 18vw;
     height: 75vh;
     position: fixed;
+    z-index: 3;
 }
 
 #home-sidebar > h4 {
-    margin: 2vh 1vw;
+    margin: 2vh 3vw;
+}
+
+#home-sidebar-tab-container {
+    position: absolute;
+    left: 3vw;
 }
 
 #home-top-bar {
     background-color: #b5dcdd;
+    width: 100vw;
     height: 10vh;
     position: fixed;
+    z-index: 2;
+}
+
+#settings-btn {
+    position: absolute;
+    right: 1vw;
+    margin: 2.5vh;
+}
+
+#create-course-btn {
+    position: absolute;
+    right: 4vw;
+    margin: 2.5vh;
 }
 
 #home-main-content {
-    width: 80vw;
+    width: 82vw;
     position: absolute;
     right: 0;
+    top: 10vh;
     padding: 5vh 5vw;
+    background-color: #e7ccb1;
 }
 
 #home-main-content > h4 {
     text-align: center;
     color: #2c6b96;
+    margin-bottom: 4vh;
+}
+
+#day-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#day-container > p {
+    margin-bottom: 0;
+}
+
+#time-container {
+    float: left;
+    position: relative;
+    top: 3.25vh;
+    right: 1vw;
+}
+
+#time-container > p {
+    margin-bottom: 18.5vh;
+}
+
+#scheduler-container > hr {
+    margin: 5vh 0;
+}
+
+.thick-line {
+    border: 2px solid black;
+}
+
+.thin-line {
+    border: 2px solid #2c6b96;
+}
+
+.instructor-course-card {
+    border: 1px solid #b5dcdd;
+}
+
+.student-course-card {
+    background-color: #b5dcdd;
+    color: black;
+    border: 1px solid #2c6b96;
+}
+
+.overlay {
+    height: 100vh;
+    width: 0;
+    position: fixed;
+    z-index: 5;
+    right: 0;
+    top: 0;
+    background-color: rgba(44,107,150, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 3vh;
+}
+
+.overlay a {
+    padding: 0.8vh 0.4vw;
+    text-decoration: none;
+    font-size: 36px;
+    color: #ce9e5b;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #e7ccb1;
+}
+
+.overlay .close-btn {
+    position: absolute;
+    top: 1.8vh;
+    right: 2.3vw;
+    font-size: 60px;
+}
+
+@media screen and (max-height: 41.6vh) {
+    .overlay a {font-size: 20px;}
+    .overlay .close-btn {
+        font-size: 40px;
+        top: 1.4vh;
+        right: 1.8vw;
+    }
+}
+
+#course-info-background {
+    background-color: rgba(44,107,150, 0.5);
+    width: 0;
+    height: 100vh;
+}
+
+#course-info-container {
+    background-color: #b5dcdd;
+    width: 60vw;
+    height: 60vh;
+    margin: auto;
+    position: absolute;
+    top: 20vh;
+    left: 21vw;
+    padding: 10vh 10vw;
 }

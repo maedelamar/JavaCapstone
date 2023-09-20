@@ -9,8 +9,8 @@ document.getElementById('login-error-text').textContent = ''
 async function handleLogin(e) {
     e.preventDefault();
 
-    document.getElementById('login-email-input').style.borderColor = "black"
-    document.getElementById('login-password-input').style.borderColor = "black"
+    document.getElementById('login-email-input').style.borderColor = "gray"
+    document.getElementById('login-password-input').style.borderColor = "gray"
 
     document.getElementById('login-error-text').textContent = ''
 
@@ -60,6 +60,7 @@ async function handleLogin(e) {
 
         if (responseArr[1]) {
             document.cookie = `userId=${responseArr[1]}`
+            document.cookie = `permission=${responseArr[2]}`
             location.replace('./home.html')
         } else {
             document.getElementById('login-email-input').style.borderColor = 'red'
