@@ -1,0 +1,8 @@
+main {
+    text-align: center;
+    padding: 2vh 2vw;
+}
+
+main > h3 {
+    color: #2c6b96;
+}
