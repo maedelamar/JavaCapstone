@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
             course.setName(course.getName());
             course.setDescription(course.getDescription());
             course.setNumber(course.getNumber());
-            course.setCategory(course.getCategory());
+            course.setImageURL(course.getImageURL());
             course.setSize(course.getSize());
             course.setStartTime(course.getStartTime());
             course.setEndTime(course.getEndTime());
@@ -96,7 +94,8 @@ public class CourseServiceImpl implements CourseService {
 
         if (instructorOptional.isPresent()) {
             List<Course> courseList = courseRepository.findAllByInstructor(instructorOptional.get());
-            return courseList.stream().map(course -> new CourseDto(course)).collect(Collectors.toList());
+            courseList.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
+            return courseList.stream().limit(20).map(course -> new CourseDto(course)).toList();
         }
 
         return Collections.emptyList();
@@ -129,5 +128,46 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return maxNum;
+    }
+
+    @Override
+    public List<CourseDto> getUpcomingCourses() {
+        List<CourseDto> courseDtos = getAllCourses();
+        LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+
+        List<CourseDto> upcomingCourses =
+                new ArrayList<>(courseDtos
+                        .stream()
+                        .filter(courseDto -> tomorrow.isBefore(courseDto.getStartTime()))
+                        .toList());
+
+        upcomingCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
+        return upcomingCourses.stream().limit(20).toList();
+    }
+
+    @Override
+    public List<CourseDto> getSearchedCourses(String search) {
+        List<CourseDto> courseDtos = getAllCourses();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<CourseDto> exactList = new ArrayList<>();
+        for (CourseDto courseDto : courseDtos) {
+            if (courseDto.getName().equalsIgnoreCase(search) && now.isBefore(courseDto.getStartTime())) {
+                exactList.add(courseDto);
+            }
+        }
+        exactList.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
+
+        List<CourseDto> startsWithList = new ArrayList<>();
+        for (CourseDto courseDto : courseDtos) {
+            if (courseDto.getName().toLowerCase().startsWith(search.toLowerCase()) && now.isBefore(courseDto.getStartTime())) {
+                startsWithList.add(courseDto);
+            }
+        }
+        startsWithList.sort((o1, o2) -> o2.getStartTime().compareTo((o1.getStartTime())));
+
+        List<CourseDto> sortedList = new ArrayList<>(exactList);
+        sortedList.addAll(startsWithList);
+        return sortedList.stream().limit(20).toList();
     }
 }

@@ -23,4 +23,8 @@ public interface CourseService {
     Optional<CourseDto> getCourseById(Long courseId);
 
     Long getHighestCourseNumber();
+
+    List<CourseDto> getUpcomingCourses();
+
+    List<CourseDto> getSearchedCourses(String search);
 }

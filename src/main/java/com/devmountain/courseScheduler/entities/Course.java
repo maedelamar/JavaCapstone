@@ -32,7 +32,7 @@ public class Course {
     private Long number;
 
     @Column
-    private String category;
+    private String imageURL;
 
     @Column
     private Integer size;
@@ -71,8 +71,8 @@ public class Course {
         if (courseDto.getNumber() != null) {
             this.number = courseDto.getNumber();
         }
-        if (courseDto.getCategory() != null) {
-            this.category = courseDto.getCategory();
+        if (courseDto.getImageURL() != null) {
+            this.imageURL = courseDto.getImageURL();
         }
         if (courseDto.getSize() != null) {
             this.size = courseDto.getSize();

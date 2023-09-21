@@ -1,6 +1,7 @@
 package com.devmountain.courseScheduler.dtos;
 
 import com.devmountain.courseScheduler.entities.Course;
+import com.devmountain.courseScheduler.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,12 @@ public class CourseDto {
     private String name;
     private String description;
     private Long number;
-    private String category;
+    private String imageURL;
     private Integer size;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String location;
+    private Long instructorId;
 
     public CourseDto(Course course) {
         if (course.getId() != null) {
@@ -34,8 +36,8 @@ public class CourseDto {
         if (course.getNumber() != null) {
             this.number = course.getNumber();
         }
-        if (course.getCategory() != null) {
-            this.category = course.getCategory();
+        if (course.getImageURL() != null) {
+            this.imageURL = course.getImageURL();
         }
         if (course.getSize() != null) {
             this.size = course.getSize();
@@ -48,6 +50,9 @@ public class CourseDto {
         }
         if (course.getLocation() != null) {
             this.location = course.getLocation();
+        }
+        if (course.getInstructor() != null) {
+            this.instructorId = course.getInstructor().getId();
         }
     }
 }

@@ -53,4 +53,14 @@ public class CourseController {
     public Long getHighestCourseNumber() {
         return courseService.getHighestCourseNumber();
     }
+
+    @GetMapping("/sorted/upcoming")
+    public List<CourseDto> getUpcomingCourses() {
+        return courseService.getUpcomingCourses();
+    }
+
+    @GetMapping("/filtered/search")
+    public List<CourseDto> getSearchedCourses(@RequestParam String search) {
+        return courseService.getSearchedCourses(search);
+    }
 }

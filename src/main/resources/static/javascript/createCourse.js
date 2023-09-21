@@ -121,8 +121,6 @@ async function handleCourseCreation(e) {
         location: locationInput.value
     }
 
-    console.log(bodyObj)
-
     const response = await fetch(`${baseURL}/${userId}`, {
         method: "POST",
         body: JSON.stringify(bodyObj),
