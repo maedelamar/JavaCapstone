@@ -1,6 +1,7 @@
 main {
     text-align: center;
     padding: 2vh 2vw;
+    min-height: 79vh;
 }
 
 main > h5 {

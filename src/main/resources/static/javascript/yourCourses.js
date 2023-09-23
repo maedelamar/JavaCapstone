@@ -49,11 +49,29 @@ async function getInstructorCourses() {
         headers
     })
     .then(res => res.json())
-    .then(data => displayYourCourses(data))
+    .then(data => displayYourCourses(data, true))
     .catch(err => console.log(err))
 }
 
-function displayYourCourses(courses) {
+async function getUserAsStudents() {
+    await fetch(`${baseURL}/students/user/${userId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => getCoursesWhereUserIsStudent(data))
+    .catch(err => console.log(err))
+}
+
+function getCoursesWhereUserIsStudent(students) {
+    const courses = []
+    for (let student of students) {
+        courses.push(student.course)
+    }
+    displayYourCourses(courses, false)
+}
+
+function displayYourCourses(courses, isInstructor) {
     for (const course of courses) {
         const card = document.createElement('div')
         card.classList.add('container')
@@ -69,8 +87,9 @@ function displayYourCourses(courses) {
             <p>
             ${convertDateStringToDay(course.startTime)} 
             ${convertDateStringToTime(course.startTime)} - ${convertDateStringToTime(course.endTime)}
-            </p>
-            <button class="btn btn-primary" onclick="">Info</button>
+            </p>`
+            + (isInstructor ? '<p>You are the instructor of this course.</p>' : '')
+            + `<button class="btn btn-primary" onclick="">Info</button>
         `
 
         document.getElementById('your-course-section').appendChild(card)
@@ -89,3 +108,4 @@ if (userId) {
 }
 
 getInstructorCourses()
+getUserAsStudents()

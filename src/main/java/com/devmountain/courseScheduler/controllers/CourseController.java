@@ -1,17 +1,13 @@
 package com.devmountain.courseScheduler.controllers;
 
 import com.devmountain.courseScheduler.dtos.CourseDto;
-import com.devmountain.courseScheduler.dtos.StudentDto;
-import com.devmountain.courseScheduler.entities.User;
-import com.devmountain.courseScheduler.repositories.UserRepository;
 import com.devmountain.courseScheduler.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/courses")
@@ -62,5 +58,10 @@ public class CourseController {
     @GetMapping("/filtered/search")
     public List<CourseDto> getSearchedCourses(@RequestParam String search) {
         return courseService.getSearchedCourses(search);
+    }
+
+    @GetMapping("/date/user/{userId}")
+    public List<CourseDto> getCoursesByDateAndUser(@RequestParam String date, @PathVariable Long userId) {
+        return courseService.getCoursesByDateAndUser(date, userId);
     }
 }

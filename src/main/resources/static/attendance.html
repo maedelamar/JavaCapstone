@@ -9,12 +9,26 @@
     <link rel="stylesheet" href="./css/home.css">
 </head>
 <body>
+    <div class="overlay" id="nav-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+
+        <div class="overlay-content">
+            
+        </div>
+    </div>
+
     <header>
         <h1>TrainUp</h1>
+        <button id="home-overlay-btn" class="btn btn-primary overlay-btn" onclick="openNav()">
+            <i class="fa fa-bars"></i>
+        </button>
     </header>
 
     <main>
-
+        <form id="attendance-form">
+            <div id="student-attendance-container"></div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </main>
 
     <footer>

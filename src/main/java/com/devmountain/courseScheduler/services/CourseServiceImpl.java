@@ -1,11 +1,9 @@
 package com.devmountain.courseScheduler.services;
 
 import com.devmountain.courseScheduler.dtos.CourseDto;
-import com.devmountain.courseScheduler.dtos.StudentDto;
 import com.devmountain.courseScheduler.entities.Course;
 import com.devmountain.courseScheduler.entities.Student;
 import com.devmountain.courseScheduler.entities.User;
-import com.devmountain.courseScheduler.entities.Waiter;
 import com.devmountain.courseScheduler.repositories.CourseRepository;
 import com.devmountain.courseScheduler.repositories.StudentRepository;
 import com.devmountain.courseScheduler.repositories.UserRepository;
@@ -95,7 +93,7 @@ public class CourseServiceImpl implements CourseService {
         if (instructorOptional.isPresent()) {
             List<Course> courseList = courseRepository.findAllByInstructor(instructorOptional.get());
             courseList.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
-            return courseList.stream().limit(20).map(course -> new CourseDto(course)).toList();
+            return courseList.stream().map(course -> new CourseDto(course)).toList();
         }
 
         return Collections.emptyList();
@@ -114,60 +112,65 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Long getHighestCourseNumber() {
-        List<CourseDto> courseDtos = getAllCourses();
+        Optional<Course> courseOptional = courseRepository.findTopByOrderByNumberDesc();
 
-        if (courseDtos.isEmpty()) {
+        if (courseOptional.isPresent()) {
+            return courseOptional.get().getNumber();
+        } else {
             return 0L;
         }
-
-        Long maxNum = courseDtos.get(0).getNumber();
-        for (CourseDto courseDto : courseDtos) {
-            if (courseDto.getNumber() > maxNum) {
-                maxNum = courseDto.getNumber();
-            }
-        }
-
-        return maxNum;
     }
 
     @Override
     public List<CourseDto> getUpcomingCourses() {
-        List<CourseDto> courseDtos = getAllCourses();
-        LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
-
-        List<CourseDto> upcomingCourses =
-                new ArrayList<>(courseDtos
-                        .stream()
-                        .filter(courseDto -> tomorrow.isBefore(courseDto.getStartTime()))
-                        .toList());
-
-        upcomingCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
-        return upcomingCourses.stream().limit(20).toList();
+        List<Course> courses = courseRepository.findAllByOrderByStartTime();
+        Collections.reverse(courses);
+        return courses.stream().map(course -> new CourseDto(course)).toList();
     }
 
     @Override
     public List<CourseDto> getSearchedCourses(String search) {
-        List<CourseDto> courseDtos = getAllCourses();
-        LocalDateTime now = LocalDateTime.now();
+        List<Course> courses = courseRepository.findAllByNameContainsIgnoreCaseOrderByStartTimeDesc(search);
+        return courses.stream().map(course -> new CourseDto(course)).toList();
+    }
 
-        List<CourseDto> exactList = new ArrayList<>();
-        for (CourseDto courseDto : courseDtos) {
-            if (courseDto.getName().equalsIgnoreCase(search) && now.isBefore(courseDto.getStartTime())) {
-                exactList.add(courseDto);
-            }
+    @Override
+    public List<CourseDto> getCoursesByDateAndUser(String dateAsString, Long userId) {
+        List<CourseDto> courses = new ArrayList<>();
+
+        List<CourseDto> instructorCourses = getCoursesByInstructor(userId);
+        if (!instructorCourses.isEmpty()) {
+            courses.addAll(instructorCourses);
         }
-        exactList.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
 
-        List<CourseDto> startsWithList = new ArrayList<>();
-        for (CourseDto courseDto : courseDtos) {
-            if (courseDto.getName().toLowerCase().startsWith(search.toLowerCase()) && now.isBefore(courseDto.getStartTime())) {
-                startsWithList.add(courseDto);
-            }
+        Optional<User> userOptional = userRepository.findById(userId);
+        List<Student> students = new ArrayList<>();
+        if (userOptional.isPresent()) {
+            students = studentRepository.findAllByUser(userOptional.get());
         }
-        startsWithList.sort((o1, o2) -> o2.getStartTime().compareTo((o1.getStartTime())));
 
-        List<CourseDto> sortedList = new ArrayList<>(exactList);
-        sortedList.addAll(startsWithList);
-        return sortedList.stream().limit(20).toList();
+        List<CourseDto> studentCourses = new ArrayList<>();
+        for (Student student : students) {
+            studentCourses.add(new CourseDto(student.getCourse()));
+        }
+
+        if (!studentCourses.isEmpty()) {
+            courses.addAll(studentCourses);
+        }
+
+        LocalDateTime date = LocalDateTime.parse(dateAsString);
+
+        List<CourseDto> filteredCourses =
+                new ArrayList<>(courses
+                        .stream()
+                        .filter(courseDto -> {
+                            return
+                                    courseDto.getStartTime().getYear() == date.getYear()
+                                    && courseDto.getStartTime().getMonth() == date.getMonth()
+                                    && courseDto.getStartTime().getDayOfMonth() == date.getDayOfMonth();
+                        })
+                        .toList());
+        filteredCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
+        return filteredCourses;
     }
 }

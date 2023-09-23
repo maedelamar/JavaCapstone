@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -121,6 +122,21 @@ public class UserServiceImpl implements UserService {
 
         if (userOptional.isPresent()) {
             return Optional.of(new UserDto(userOptional.get()));
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserDto> getUserByStudentId(Long studentId) {
+        Optional<Student> studentOptional = studentRepository.findById(studentId);
+
+        if (studentOptional.isPresent()) {
+            Optional<User> userOptional = userRepository.findById(studentOptional.get().getUser().getId());
+
+            if (userOptional.isPresent()) {
+                return Optional.of(new UserDto(userOptional.get()));
+            }
         }
 
         return Optional.empty();

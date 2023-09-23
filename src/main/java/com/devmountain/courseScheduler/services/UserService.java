@@ -19,4 +19,6 @@ public interface UserService {
     List<UserDto> getAllUsers();
 
     Optional<UserDto> getUserById(Long userId);
+
+    Optional<UserDto> getUserByStudentId(Long studentId);
 }

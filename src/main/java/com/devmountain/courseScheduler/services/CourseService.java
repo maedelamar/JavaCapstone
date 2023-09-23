@@ -3,6 +3,7 @@ package com.devmountain.courseScheduler.services;
 import com.devmountain.courseScheduler.dtos.CourseDto;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,6 @@ public interface CourseService {
     List<CourseDto> getUpcomingCourses();
 
     List<CourseDto> getSearchedCourses(String search);
+
+    List<CourseDto> getCoursesByDateAndUser(String dateAsString, Long userId);
 }
