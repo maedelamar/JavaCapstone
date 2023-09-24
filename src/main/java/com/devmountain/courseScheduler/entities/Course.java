@@ -46,6 +46,9 @@ public class Course {
     @Column
     private String location;
 
+    @Column(columnDefinition = "text")
+    private String notes;
+
     @ManyToOne
     @JsonBackReference
     private User instructor;
@@ -85,6 +88,9 @@ public class Course {
         }
         if (courseDto.getLocation() != null) {
             this.location = courseDto.getLocation();
+        }
+        if (courseDto.getNotes() != null) {
+            this.notes = courseDto.getNotes();
         }
     }
 }

@@ -58,4 +58,14 @@ public class StudentController {
     public Optional<StudentDto> getStudentById(@PathVariable Long studentId) {
         return studentService.getStudentById(studentId);
     }
+
+    @GetMapping("/course/{courseId}/count")
+    public Long getCountCourse(@PathVariable Long courseId) {
+        return studentService.getCountCourse(courseId);
+    }
+
+    @GetMapping("/course/{courseId}/count/attended")
+    public Long getCountAttended(@PathVariable Long courseId) {
+        return studentService.getCountAttended(courseId);
+    }
 }

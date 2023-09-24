@@ -11,4 +11,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findAllByUser(User user);
 
     List<Student> findAllByCourse(Course course);
+
+    Long countByCourse(Course course);
+
+    Long countByCourseAndAttended(Course course, boolean attended);
 }

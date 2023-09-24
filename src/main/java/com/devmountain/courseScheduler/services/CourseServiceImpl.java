@@ -74,6 +74,7 @@ public class CourseServiceImpl implements CourseService {
             course.setStartTime(course.getStartTime());
             course.setEndTime(course.getEndTime());
             course.setLocation(course.getLocation());
+            course.setNotes(course.getNotes());
             courseRepository.saveAndFlush(course);
         });
         response.add("Course Updated");

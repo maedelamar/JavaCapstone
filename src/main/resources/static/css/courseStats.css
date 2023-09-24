@@ -1,0 +1,23 @@
+#stats-container {
+    background-color: #b5dcdd;
+    width: 90vw;
+    height: 72vh;
+    margin: 0 auto;
+    padding: 10vh 10vw;
+}
+
+#stats-container p {
+    margin-bottom: 8vh;
+}
+
+#stats-size {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#stats-notes-container {
+    background-color: #b5dcdd;
+    width: 90vw;
+    margin: 5vh auto;
+    padding: 10vh 10vw;
+}

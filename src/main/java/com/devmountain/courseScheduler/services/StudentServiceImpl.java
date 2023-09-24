@@ -147,4 +147,26 @@ public class StudentServiceImpl implements StudentService {
 
         return Optional.empty();
     }
+
+    @Override
+    public Long getCountCourse(Long courseId) {
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+
+        if (courseOptional.isPresent()) {
+            return studentRepository.countByCourse(courseOptional.get());
+        } else {
+            return 0L;
+        }
+    }
+
+    @Override
+    public Long getCountAttended(Long courseId) {
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+
+        if (courseOptional.isPresent()) {
+            return studentRepository.countByCourseAndAttended(courseOptional.get(), true);
+        } else {
+            return 0L;
+        }
+    }
 }

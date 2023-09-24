@@ -21,6 +21,7 @@ public class CourseDto {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String location;
+    private String notes;
     private Long instructorId;
 
     public CourseDto(Course course) {
@@ -50,6 +51,9 @@ public class CourseDto {
         }
         if (course.getLocation() != null) {
             this.location = course.getLocation();
+        }
+        if (course.getNotes() != null) {
+            this.notes = course.getNotes();
         }
         if (course.getInstructor() != null) {
             this.instructorId = course.getInstructor().getId();
