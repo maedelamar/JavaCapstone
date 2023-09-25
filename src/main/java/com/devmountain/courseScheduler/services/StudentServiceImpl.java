@@ -75,44 +75,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @Transactional
-    public List<String> deleteAllStudentsByUserId(Long userId) {
-        List<String> response = new ArrayList<>();
-        Optional<User> userOptional = userRepository.findById(userId);
-
-        List<Student> students = Collections.emptyList();
-        if (userOptional.isPresent()) {
-            students = studentRepository.findAllByUser(userOptional.get());
-        }
-
-        for (Student student : students) {
-            studentRepository.delete(student);
-        }
-
-        response.add("Students Deleted");
-        return response;
-    }
-
-    @Override
-    @Transactional
-    public List<String> deleteAllStudentsByCourseId(Long courseId) {
-        List<String> response = new ArrayList<>();
-        Optional<Course> courseOptional = courseRepository.findById(courseId);
-
-        List<Student> students = Collections.emptyList();
-        if (courseOptional.isPresent()) {
-            students = studentRepository.findAllByCourse(courseOptional.get());
-        }
-
-        for (Student student : students) {
-            studentRepository.delete(student);
-        }
-
-        response.add("Students Deleted");
-        return response;
-    }
-
-    @Override
     public List<StudentDto> getAllStudents() {
         List<Student> students = studentRepository.findAll();
         return students.stream().map(student -> new StudentDto(student)).collect(Collectors.toList());

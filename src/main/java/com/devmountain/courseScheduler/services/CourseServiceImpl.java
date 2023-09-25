@@ -4,6 +4,7 @@ import com.devmountain.courseScheduler.dtos.CourseDto;
 import com.devmountain.courseScheduler.entities.Course;
 import com.devmountain.courseScheduler.entities.Student;
 import com.devmountain.courseScheduler.entities.User;
+import com.devmountain.courseScheduler.entities.Waiter;
 import com.devmountain.courseScheduler.repositories.CourseRepository;
 import com.devmountain.courseScheduler.repositories.StudentRepository;
 import com.devmountain.courseScheduler.repositories.UserRepository;
@@ -54,6 +55,12 @@ public class CourseServiceImpl implements CourseService {
         List<String> response = new ArrayList<>();
         Optional<Course> courseOptional = courseRepository.findById(courseId);
         courseOptional.ifPresent(course -> {
+            List<Student> studentsInCourse = studentRepository.findAllByCourse(course);
+            List<Waiter> courseWaitingList = waiterRepository.findAllByCourse(course);
+
+            studentRepository.deleteAll(studentsInCourse);
+            waiterRepository.deleteAll(courseWaitingList);
+
             courseRepository.delete(course);
         });
         response.add("Course Deleted");

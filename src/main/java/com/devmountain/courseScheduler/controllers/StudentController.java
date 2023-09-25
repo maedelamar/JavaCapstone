@@ -29,16 +29,6 @@ public class StudentController {
         return studentService.deleteStudentById(studentId);
     }
 
-    @DeleteMapping("/user/{userId}")
-    public List<String> deleteAllStudentsByUserId(@PathVariable Long userId) {
-        return studentService.deleteAllStudentsByUserId(userId);
-    }
-
-    @DeleteMapping("/course/{courseId}")
-    public List<String> deleteAllStudentsByCourseId(@PathVariable Long courseId) {
-        return studentService.deleteAllStudentsByCourseId(courseId);
-    }
-
     @GetMapping
     public List<StudentDto> getAllStudents() {
         return studentService.getAllStudents();

@@ -56,44 +56,6 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     @Override
-    @Transactional
-    public List<String> deleteAllWaitersByUserId(Long userId) {
-        List<String> response = new ArrayList<>();
-        Optional<User> userOptional = userRepository.findById(userId);
-
-        List<Waiter> waiters = Collections.emptyList();
-        if (userOptional.isPresent()) {
-            waiters = waiterRepository.findAllByUser(userOptional.get());
-        }
-
-        for (Waiter waiter : waiters) {
-            waiterRepository.delete(waiter);
-        }
-
-        response.add("Waiters Deleted");
-        return response;
-    }
-
-    @Override
-    @Transactional
-    public List<String> deleteAllWaitersByCourseId(Long courseId) {
-        List<String> response = new ArrayList<>();
-        Optional<Course> courseOptional = courseRepository.findById(courseId);
-
-        List<Waiter> waiters = Collections.emptyList();
-        if (courseOptional.isPresent()) {
-            waiters = waiterRepository.findAllByCourse(courseOptional.get());
-        }
-
-        for (Waiter waiter : waiters) {
-            waiterRepository.delete(waiter);
-        }
-
-        response.add("Waiters Deleted");
-        return response;
-    }
-
-    @Override
     public List<WaiterDto> getAllWaiters() {
         List<Waiter> waiters = waiterRepository.findAll();
         return waiters.stream().map(waiter -> new WaiterDto(waiter)).collect(Collectors.toList());

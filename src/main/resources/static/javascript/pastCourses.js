@@ -84,11 +84,10 @@ function displayPastCourses(courses) {
             <p>
             ${convertDateStringToDay(course.startTime)} 
             ${convertDateStringToTime(course.startTime)} - ${convertDateStringToTime(course.endTime)}
-            </p>`
-            + (isInstructor ? '<p>You are the instructor of this course.</p>' : '')
-            + `<button class="btn btn-primary" onclick="${isInstructor ? "location.replace('./courseStats.html?course=" + course.id + "')" : ''}">
-            ${isInstructor ? 'Stats' : 'Rate'}
-        </button>
+            </p>
+            <button class="btn btn-primary" onclick="${isInstructor ? "location.replace('./courseStats.html?course=" + course.id + "')" : ''}">
+                ${isInstructor ? 'Stats' : 'Rate'}
+            </button>
         `
 
         document.getElementById('your-course-section').appendChild(card)
@@ -96,14 +95,14 @@ function displayPastCourses(courses) {
 }
 
 if (userId) {
-    if (userId === 1 || userId === 3) {
+    if (permission === 1 || permission === 3) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
             <a href = "./createCourse.html>Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</p>
+        <a href="./yourCourses.html">Your Courses</a>
         <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `

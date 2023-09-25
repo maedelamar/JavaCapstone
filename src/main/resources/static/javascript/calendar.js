@@ -165,15 +165,15 @@ function renderCourseToDate(courses, row, column) {
 }
 
 if (userId) {
-    if (userId === 1 || userId === 3) {
+    if (permission === 1 || permission === 3) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
             <a href = "./createCourse.html>Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</p>
-        <a href="./calendar.html">Calendar</a>
+        <a href="./yourCourses.html">Your Courses</a>
+        <a href="./pastCourses.html">Past Courses</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {

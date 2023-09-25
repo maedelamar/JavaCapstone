@@ -13,12 +13,6 @@ public interface WaiterService {
     @Transactional
     List<String> deleteWaiterById(Long waiterId);
 
-    @Transactional
-    List<String> deleteAllWaitersByUserId(Long userId);
-
-    @Transactional
-    List<String> deleteAllWaitersByCourseId(Long courseId);
-
     List<WaiterDto> getAllWaiters();
 
     List<WaiterDto> getWaitersByUser(Long userId);

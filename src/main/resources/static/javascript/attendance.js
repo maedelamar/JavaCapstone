@@ -141,19 +141,21 @@ async function handleSubmit(e) {
 
         if (response.status === 200) {
             alert("Attendance Submitted")
+            location.replace(`./finalizeCourseStats.html?course=${courseId}`)
         }
     }
 }
 
 if (userId) {
-    if (userId === 1 || userId === 3) {
+    if (permission === 1 || permission === 3) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
             <a href = "./createCourse.html>Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</p>
+        <a href="./yourCourses.html">Your Courses</a>
+        <a href="./pastCourses.html">Past Courses</a>
         <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `

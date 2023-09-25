@@ -63,6 +63,37 @@ async function getInstructorName(instructorId) {
     })
     .then(res => res.json())
     .then(data => instructorName = `${data.firstName} ${data.lastName}`)
+    .catch(err => console.log(err))
+}
+
+function giveBtnOnclick(id, size, isIntructor) {
+    if (isIntructor) {
+        return `location.replace('./courseStats.html?course=${id}')`
+    } else if (currentStudentCount < size) {
+        return `enroll(${id})`
+    } else if (currentStudentCount >= size) {
+        return `enterWaitingList(${id})`
+    } else {
+        return ''
+    }
+}
+
+async function deleteCourse(id) {
+    const willDelete = confirm('Do you want to delete this course?')
+    if (!willDelete) {
+        return
+    }
+
+    const response = await fetch(`${baseURL}/courses/${id}`, {
+        method: "DELETE",
+        headers
+    })
+    .catch(err => console.log(err))
+
+    if (response.status === 200) {
+        alert('Course Deleted')
+        getInstructorCourses()
+    }
 }
 
 async function getInstructorCourses() {
@@ -71,7 +102,7 @@ async function getInstructorCourses() {
         headers
     })
     .then(res => res.json())
-    .then(data => displayYourCourses(data, true))
+    .then(data => displayYourCourses(data))
     .catch(err => console.log(err))
 }
 
@@ -90,10 +121,12 @@ function getCoursesWhereUserIsStudent(students) {
     for (let student of students) {
         courses.push(student.course)
     }
-    displayYourCourses(courses, false)
+    displayYourCourses(courses)
 }
 
-function displayYourCourses(courses, isInstructor) {
+function displayYourCourses(courses) {
+    document.getElementById('upcoming-course-section').innerHTML = ''
+
     for (const course of courses) {
         const card = document.createElement('div')
         card.classList.add('container')
@@ -101,6 +134,8 @@ function displayYourCourses(courses, isInstructor) {
 
         getStudentCount(course.id)
         getInstructorName(course.instructorId)
+
+        let isInstructor = (userId === course.instructorId)
 
         card.innerHTML = `
             <img class="course-card-img" src="${course.imageURL}">
@@ -112,11 +147,11 @@ function displayYourCourses(courses, isInstructor) {
             <p>
             ${convertDateStringToDay(course.startTime)} 
             ${convertDateStringToTime(course.startTime)} - ${convertDateStringToTime(course.endTime)}
-            </p>`
-            + (isInstructor ? '<p>You are the instructor of this course.</p>' : '')
-            + `<button class="btn btn-primary" onclick=${currentStudentCount < course.size ? "enroll(" + course.id + ")" : "enterWaitingList(" + course.id + ")"}>
-            Enroll
-        </button>
+            </p>
+            <button class="btn btn-primary" onclick=${giveBtnOnclick(course.id, course.size, isInstructor)}>
+                ${isInstructor ? 'Stats' : 'Enroll'}
+            </button>
+            ${isInstructor ? `<button class="btn btn-danger" onclick="deleteCourse(${course.id})">Delete</button>` : ''}
         `
 
         document.getElementById('your-course-section').appendChild(card)
@@ -160,14 +195,14 @@ async function enterWaitingList(courseId) {
 }
 
 if (userId) {
-    if (userId === 1 || userId === 3) {
+    if (permission === 1 || permission === 3) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
             <a href = "./createCourse.html>Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</p>
+        <a href="./pastCourses.html">Past Courses</a>
         <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `

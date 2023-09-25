@@ -9,6 +9,19 @@ header {
     z-index: 3;
 }
 
+.home-btn {
+    background-color: #2c6b96;
+    color: #e7ccb1;
+    font-size: 36pt;
+    position: absolute;
+    top: 1.5vh;
+    left: 3vw;
+}
+
+.home-btn:hover {
+    color: #ce9e5b;
+}
+
 header .btn-primary {
     background-color: #2c6b96;
     color: #e7ccb1;

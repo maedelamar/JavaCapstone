@@ -115,6 +115,12 @@ public class UserServiceImpl implements UserService {
         List<String> response = new ArrayList<>();
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
+            List<Student> userAsStudentList = studentRepository.findAllByUser(user);
+            List<Waiter> userAsWaiterList = waiterRepository.findAllByUser(user);
+
+            studentRepository.deleteAll(userAsStudentList);
+            waiterRepository.deleteAll(userAsWaiterList);
+
             userRepository.delete(user);
         });
         response.add("User Deleted");

@@ -24,16 +24,6 @@ public class WaiterController {
         return waiterService.deleteWaiterById(waiterId);
     }
 
-    @DeleteMapping("/user/{userId}")
-    public List<String> deleteAllWaitersByUserId(@PathVariable Long userId) {
-        return waiterService.deleteAllWaitersByUserId(userId);
-    }
-
-    @DeleteMapping("/course/{courseId}")
-    public List<String> deleteAllWaitersByCourseId(@PathVariable Long courseId) {
-        return waiterService.deleteAllWaitersByCourseId(courseId);
-    }
-
     @GetMapping
     public List<WaiterDto> getAllWaiters() {
         return waiterService.getAllWaiters();

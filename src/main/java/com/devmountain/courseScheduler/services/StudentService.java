@@ -16,12 +16,6 @@ public interface StudentService {
     @Transactional
     List<String> deleteStudentById(Long studentId);
 
-    @Transactional
-    List<String> deleteAllStudentsByUserId(Long userId);
-
-    @Transactional
-    List<String> deleteAllStudentsByCourseId(Long courseId);
-
     List<StudentDto> getAllStudents();
 
     List<StudentDto> getStudentsByUserId(Long userId);
