@@ -24,7 +24,7 @@ public class StudentController {
         return studentService.updateStudent(studentDto);
     }
 
-    @DeleteMapping("/id/{studentId}")
+    @DeleteMapping("/{studentId}")
     public  List<String> deleteStudentById(@PathVariable Long studentId) {
         return studentService.deleteStudentById(studentId);
     }

@@ -66,15 +66,34 @@ public class CourseServiceImpl implements CourseService {
         List<String> response = new ArrayList<>();
         Optional<Course> courseOptional = courseRepository.findById(courseDto.getId());
         courseOptional.ifPresent(course -> {
-            course.setName(course.getName());
-            course.setDescription(course.getDescription());
-            course.setNumber(course.getNumber());
-            course.setImageURL(course.getImageURL());
-            course.setSize(course.getSize());
-            course.setStartTime(course.getStartTime());
-            course.setEndTime(course.getEndTime());
-            course.setLocation(course.getLocation());
-            course.setNotes(course.getNotes());
+            if (courseDto.getName() != null) {
+                course.setName(courseDto.getName());
+            }
+            if (courseDto.getDescription() != null) {
+                course.setDescription(courseDto.getDescription());
+            }
+            if (courseDto.getNumber() != null) {
+                course.setNumber(courseDto.getNumber());
+            }
+            if (courseDto.getImageURL() != null) {
+                course.setImageURL(courseDto.getImageURL());
+            }
+            if (courseDto.getSize() != null) {
+                course.setSize(courseDto.getSize());
+            }
+            if (courseDto.getStartTime() != null) {
+                course.setSize((courseDto.getSize()));
+            }
+            if (courseDto.getEndTime() != null) {
+                course.setEndTime(courseDto.getEndTime());
+            }
+            if (courseDto.getLocation() != null) {
+                course.setLocation(courseDto.getLocation());
+            }
+            if (courseDto.getNotes() != null) {
+                course.setNotes(courseDto.getNotes());
+            }
+
             courseRepository.saveAndFlush(course);
         });
         response.add("Course Updated");
@@ -124,8 +143,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseDto> getUpcomingCourses() {
-        List<Course> courses = courseRepository.findAllByOrderByStartTime();
-        Collections.reverse(courses);
+        List<Course> courses = courseRepository
+                                .findAllByStartTimeGreaterThanOrderByStartTimeDesc(LocalDateTime.now());
         return courses.stream().map(course -> new CourseDto(course)).toList();
     }
 
@@ -170,6 +189,39 @@ public class CourseServiceImpl implements CourseService {
                                     && courseDto.getStartTime().getMonth() == date.getMonth()
                                     && courseDto.getStartTime().getDayOfMonth() == date.getDayOfMonth();
                         })
+                        .toList());
+        filteredCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
+        return filteredCourses;
+    }
+
+    @Override
+    public List<CourseDto> getPastCourses(Long userId) {
+        List<CourseDto> courses = new ArrayList<>();
+
+        List<CourseDto> instructorCourses = getCoursesByInstructor(userId);
+        if (!instructorCourses.isEmpty()) {
+            courses.addAll(instructorCourses);
+        }
+
+        Optional<User> userOptional = userRepository.findById(userId);
+        List<Student> students = new ArrayList<>();
+        if (userOptional.isPresent()) {
+            students = studentRepository.findAllByUser(userOptional.get());
+        }
+
+        List<CourseDto> studentCourses = new ArrayList<>();
+        for (Student student : students) {
+            studentCourses.add(new CourseDto(student.getCourse()));
+        }
+
+        if (!studentCourses.isEmpty()) {
+            courses.addAll(studentCourses);
+        }
+
+        List<CourseDto> filteredCourses =
+                new ArrayList<>(courses
+                        .stream()
+                        .filter(courseDto -> courseDto.getStartTime().isBefore(LocalDateTime.now()))
                         .toList());
         filteredCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
         return filteredCourses;

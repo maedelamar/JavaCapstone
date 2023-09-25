@@ -10,7 +10,6 @@ if (document.cookie) {
     permission = +cookieArr[1].split("=")[1]
 }
 
-let currentStudentCount = 0
 let instructorName = ''
 
 function handleLogout() {
@@ -18,7 +17,7 @@ function handleLogout() {
     for (let i in c) {
         document.cookie = /^[^=]+/.exec(c[i])[0]+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
     }
-    location.replace("./home.html");
+    location.replace('./home.html');
 }
 
 function openNav() {
@@ -46,16 +45,6 @@ function convertDateStringToTime(dateString) {
     return hour + ':' + String(dateSringAsDate.getMinutes()).padStart(2, '0') + meridiem
 }
 
-async function getStudentCount(courseId) {
-    await fetch(`${baseURL}/students/course/${courseId}/count`, {
-        method: "GET",
-        headers
-    })
-    .then(res => res.json())
-    .then(data => currentStudentCount = data)
-    .catch(err => console.log(err))
-}
-
 async function getInstructorName(instructorId) {
     await fetch(`${baseURL}/users/${instructorId}`, {
         method: "GET",
@@ -65,23 +54,24 @@ async function getInstructorName(instructorId) {
     .then(data => instructorName = `${data.firstName} ${data.lastName}`)
 }
 
-async function getUpcomingCourses() {
-    await fetch(`${baseURL}/courses/sorted/upcoming`, {
+async function getPastCourses() {
+    await fetch(`${baseURL}/courses/user/${userId}/past`, {
         method: "GET",
         headers
     })
     .then(res => res.json())
-    .then(data => displayUpcomingCourses(data))
+    .then(data => displayPastCourses(data))
     .catch(err => console.log(err))
 }
 
-function displayUpcomingCourses(courses) {
+function displayPastCourses(courses) {
     for (const course of courses) {
         const card = document.createElement('div')
         card.classList.add('container')
         card.classList.add('course-container')
 
-        getStudentCount(course.id)
+        let isInstructor = (userId === course.instructorId)
+
         getInstructorName(course.instructorId)
 
         card.innerHTML = `
@@ -94,59 +84,14 @@ function displayUpcomingCourses(courses) {
             <p>
             ${convertDateStringToDay(course.startTime)} 
             ${convertDateStringToTime(course.startTime)} - ${convertDateStringToTime(course.endTime)}
-            </p>
-            <button class="btn btn-primary" onclick=${currentStudentCount < course.size ? "enroll(" + course.id + ")" : "enterWaitingList(" + course.id + ")"}>
-                Enroll
-            </button>
+            </p>`
+            + (isInstructor ? '<p>You are the instructor of this course.</p>' : '')
+            + `<button class="btn btn-primary" onclick="${isInstructor ? "location.replace('./courseStats.html?course=" + course.id + "')" : ''}">
+            ${isInstructor ? 'Stats' : 'Rate'}
+        </button>
         `
 
-        document.getElementById('upcoming-course-section').appendChild(card)
-    }
-}
-
-async function enroll(courseId) {
-    if (!userId) {
-        location.replace('./login.html')
-        return
-    }
-
-    let willEnroll = confirm("Do you want to enroll in this course?")
-    if (!willEnroll) {
-        return
-    }
-
-    const response = await fetch(`${baseURL}/students/${courseId}/${userId}`, {
-        method: "POST",
-        body: JSON.stringify({attended: false}),
-        headers
-    })
-    .catch(err => console.log(err))
-
-    if (response.status === 200) {
-        alert("You are now enrolled in this course.")
-    }
-}
-
-async function enterWaitingList(courseId) {
-    if (!userId) {
-        location.replace('./login.html')
-        return
-    }
-
-    let willWait = confirm("This course is full. Would you like to enter its waiting list?")
-    if (!willWait) {
-        return
-    }
-
-    const response = await fetch(`${baseURL}/waitingList/${courseId}/${userId}`, {
-        method: "POST",
-        body: JSON.stringify({}),
-        headers
-    })
-    .catch(err => console.log(err))
-
-    if (response.status === 200) {
-        alert("You are on the waiting list for this course.")
+        document.getElementById('your-course-section').appendChild(card)
     }
 }
 
@@ -169,9 +114,4 @@ if (userId) {
     `
 }
 
-getUpcomingCourses()
-
-document.getElementById('home-search-form').addEventListener('submit', e => {
-    e.preventDefault()
-    location.replace(`./search.html?search=${document.getElementById('home-search-input').value}`)
-})
+getPastCourses()

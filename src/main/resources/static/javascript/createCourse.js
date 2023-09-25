@@ -55,6 +55,7 @@ function calculateEndTime(startTime, duration) {
 async function handleCourseCreation(e) {
     e.preventDefault()
 
+    const imageInput = document.getElementById('course-image-input')
     const nameInput = document.getElementById('course-name-input')
     const descriptionInput = document.getElementById('course-description-input')
     const categoryInput = document.getElementById('course-category-input')
@@ -63,6 +64,7 @@ async function handleCourseCreation(e) {
     const startTimeInput = document.getElementById('course-start-time-input')
     const durationInput = document.getElementById('course-length-input')
 
+    imageInput.style.borderColor = 'gray'
     nameInput.style.borderColor = 'gray'
     descriptionInput.style.borderColor = 'gray'
     categoryInput.style.borderColor = 'gray'
@@ -103,6 +105,13 @@ async function handleCourseCreation(e) {
         durationInput.style.borderColor = 'red'
     }
 
+    let imageURL;
+    if (imageInput.src) {
+        imageURL = imageInput.src
+    } else {
+        imageURL = 'https://images.pond5.com/male-tutor-teaching-university-students-footage-040447646_iconl.jpeg'
+    }
+
     if (!confirmed) {
         document.getElementById('course-error-text').innerHTML = 'Fields must not be empty.'
         return
@@ -114,6 +123,7 @@ async function handleCourseCreation(e) {
         name: nameInput.value,
         description: descriptionInput.value,
         number: highestCourseNumber + 1,
+        imageURL,
         category: categoryInput.value,
         size: sizeInput.value,
         startTime: startTimeInput.value,

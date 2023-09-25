@@ -5,7 +5,6 @@ import com.devmountain.courseScheduler.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,5 +62,10 @@ public class CourseController {
     @GetMapping("/date/user/{userId}")
     public List<CourseDto> getCoursesByDateAndUser(@RequestParam String date, @PathVariable Long userId) {
         return courseService.getCoursesByDateAndUser(date, userId);
+    }
+
+    @GetMapping("/user/{userId}/past")
+    public List<CourseDto> getPastCourses(@PathVariable Long userId) {
+        return courseService.getPastCourses(userId);
     }
 }

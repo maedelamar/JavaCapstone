@@ -51,8 +51,13 @@ public class StudentServiceImpl implements StudentService {
         List<String> response = new ArrayList<>();
         Optional<Student> studentOptional = studentRepository.findById(studentDto.getId());
         studentOptional.ifPresent(student -> {
-            student.setAttended(student.getAttended());
-            student.setRating(student.getRating());
+            if (studentDto.getAttended() != null) {
+                student.setAttended(studentDto.getAttended());
+            }
+            if (studentDto.getRating() != null) {
+                student.setRating(studentDto.getRating());
+            }
+
             studentRepository.saveAndFlush(student);
         });
         response.add("Student Updated");

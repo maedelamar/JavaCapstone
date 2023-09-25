@@ -81,8 +81,8 @@ function renderStudent(user, studentId) {
     studentPresentSelect.classList.add('student-present-selector')
 
     const studentNoChoiceOption = document.createElement('option')
-    studentPresentOption.textContent = ''
-    studentPresentOption.value = studentId + " " + 0
+    studentNoChoiceOption.textContent = ''
+    studentNoChoiceOption.value = studentId + " " + 0
 
     const studentPresentOption = document.createElement('option')
     studentPresentOption.textContent = 'Present'
@@ -121,7 +121,7 @@ function renderStudent(user, studentId) {
 async function handleSubmit(e) {
     e.preventDefault()
 
-    const studentPresentSelectors = document.querySelectorAll('student-present-selector')
+    const studentPresentSelectors = document.querySelectorAll('.student-present-selector')
     for (let studentPresentSelector of studentPresentSelectors) {
         const selectorValue = studentPresentSelector.value
         const studentId = selectorValue.split(' ')[0]
@@ -132,18 +132,29 @@ async function handleSubmit(e) {
             attended: Boolean(attended)
         }
 
-        await fetch(`${baseURL}/students`, {
+        const response = await fetch(`${baseURL}/students`, {
             method: "PUT",
-            body: bodyObj,
+            body: JSON.stringify(bodyObj),
             headers
         })
-        .then(() => console.log("Data Submitted"))
         .catch(err => console.log(err))
+
+        if (response.status === 200) {
+            alert("Attendance Submitted")
+        }
     }
 }
 
 if (userId) {
-    document.querySelector('#nav-menu .overlay-content').innerHTML = `
+    if (userId === 1 || userId === 3) {
+        document.querySelector('#nav-menu .overlay-content').innerHTML = `
+            <a href = "./createCourse.html>Create Course</a>
+        `
+    }
+
+    document.querySelector('#nav-menu .overlay-content').innerHTML += `
+        <a href="./yourCourses.html">Your Courses</p>
+        <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {

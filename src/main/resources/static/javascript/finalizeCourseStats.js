@@ -112,7 +112,7 @@ async function handleSubmit(e) {
 
     const response = await fetch(`${baseURL}/courses`, {
         method: "PUT",
-        body: bodyObj,
+        body: JSON.stringify(bodyObj),
         headers
     })
     .catch(err => console.log(err))
@@ -123,7 +123,15 @@ async function handleSubmit(e) {
 }
 
 if (userId) {
-    document.querySelector('#nav-menu .overlay-content').innerHTML = `
+    if (userId === 1 || userId === 3) {
+        document.querySelector('#nav-menu .overlay-content').innerHTML = `
+            <a href = "./createCourse.html>Create Course</a>
+        `
+    }
+
+    document.querySelector('#nav-menu .overlay-content').innerHTML += `
+        <a href="./yourCourses.html">Your Courses</p>
+        <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {

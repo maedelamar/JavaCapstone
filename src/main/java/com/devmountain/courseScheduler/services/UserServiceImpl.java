@@ -74,11 +74,22 @@ public class UserServiceImpl implements UserService {
         List<String> response = new ArrayList<>();
         Optional<User> userOptional = userRepository.findById(userDto.getId());
         userOptional.ifPresent(user -> {
-            user.setEmail(user.getEmail());
-            user.setPassword(user.getPassword());
-            user.setFirstName(user.getFirstName());
-            user.setLastName(user.getLastName());
-            user.setPermission(user.getPermission());
+            if (userDto.getEmail() != null) {
+                user.setEmail(userDto.getEmail());
+            }
+            if (userDto.getPassword() != null) {
+                user.setPassword(userDto.getPassword());
+            }
+            if (userDto.getFirstName() != null) {
+                user.setFirstName(userDto.getFirstName());
+            }
+            if (userDto.getLastName() != null) {
+                user.setLastName(userDto.getLastName());
+            }
+            if (userDto.getPermission() != null) {
+                user.setPermission(userDto.getPermission());
+            }
+
             userRepository.saveAndFlush(user);
         });
         response.add("User Updated");

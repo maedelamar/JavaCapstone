@@ -30,4 +30,6 @@ public interface CourseService {
     List<CourseDto> getSearchedCourses(String search);
 
     List<CourseDto> getCoursesByDateAndUser(String dateAsString, Long userId);
+
+    List<CourseDto> getPastCourses(Long userId);
 }

@@ -24,11 +24,11 @@ public class Student {
     private Integer rating;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "user_student")
     private User user;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "course_student")
     private Course course;
 
     public Student(StudentDto studentDto) {

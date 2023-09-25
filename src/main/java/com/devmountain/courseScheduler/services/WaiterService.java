@@ -11,9 +11,6 @@ public interface WaiterService {
     List<String> addWaiter(WaiterDto waiterDto, Long userId, Long courseId);
 
     @Transactional
-    List<String> updateWaiter(WaiterDto waiterDto);
-
-    @Transactional
     List<String> deleteWaiterById(Long waiterId);
 
     @Transactional

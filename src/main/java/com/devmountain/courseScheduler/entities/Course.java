@@ -54,11 +54,11 @@ public class Course {
     private User instructor;
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonManagedReference
+    @JsonManagedReference(value = "course_student")
     private Set<Student> students = new HashSet<>();
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonManagedReference
+    @JsonManagedReference(value = "course_waiter")
     private Set<Waiter> waitingSet = new HashSet<>();
 
     public Course(CourseDto courseDto) {

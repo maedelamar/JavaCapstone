@@ -47,19 +47,6 @@ public class WaiterServiceImpl implements WaiterService {
 
     @Override
     @Transactional
-    public List<String> updateWaiter(WaiterDto waiterDto) {
-        List<String> response = new ArrayList<>();
-        Optional<Waiter> waiterOptional = waiterRepository.findById(waiterDto.getId());
-        waiterOptional.ifPresent(waiter -> {
-            waiter.setTimeApplied(waiterDto.getTimeApplied());
-            waiterRepository.saveAndFlush(waiter);
-        });
-        response.add("Waiter Updated");
-        return response;
-    }
-
-    @Override
-    @Transactional
     public List<String> deleteWaiterById(Long waiterId) {
         List<String> response = new ArrayList<>();
         Optional<Waiter> waiterOptional = waiterRepository.findById(waiterId);

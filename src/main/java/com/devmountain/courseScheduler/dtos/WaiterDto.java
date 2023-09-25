@@ -12,14 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class WaiterDto {
     private Long id;
-    private LocalDateTime timeApplied;
 
     public WaiterDto(Waiter waiter) {
         if (waiter.getId() != null) {
             this.id = waiter.getId();
-        }
-        if (waiter.getTimeApplied() != null) {
-            this.timeApplied = waiter.getTimeApplied();
         }
     }
 }

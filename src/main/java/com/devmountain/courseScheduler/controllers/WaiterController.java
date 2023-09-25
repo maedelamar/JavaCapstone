@@ -19,12 +19,7 @@ public class WaiterController {
         return waiterService.addWaiter(waiterDto, userId, courseId);
     }
 
-    @PutMapping
-    public List<String> updateWaiter(@RequestBody WaiterDto waiterDto) {
-        return waiterService.updateWaiter(waiterDto);
-    }
-
-    @DeleteMapping("/id/{waiterId}")
+    @DeleteMapping("/{waiterId}")
     public List<String> deleteWaiterById(@PathVariable Long waiterId) {
         return waiterService.deleteWaiterById(waiterId);
     }

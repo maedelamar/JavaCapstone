@@ -40,12 +40,12 @@ public class User {
     private Set<Course> coursesInstructed = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonManagedReference
+    @JsonManagedReference(value = "user_student")
     private Set<Student> userAsStudentSet = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonManagedReference
-    private Set<Student> userAsWaiterSet = new HashSet<>();
+    @JsonManagedReference(value = "user_waiter")
+    private Set<Waiter> userAsWaiterSet = new HashSet<>();
 
     public User(UserDto userDto) {
         if (userDto.getId() != null) {

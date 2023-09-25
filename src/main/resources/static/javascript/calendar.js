@@ -50,8 +50,6 @@ function openCourseOverlay(courses) {
     console.log("Course overlay width changed")
 
     for (let course of courses) {
-        console.log(course)
-
         let startMeridiem = 'am'
         let startTime = new Date(course.startTime)
         let startHour = startTime.getHours()
@@ -101,7 +99,7 @@ function renderCalendar() {
     for (let i = 1; i <= lastDateOfMonth; i++) {
         document.getElementById(`r${currentRow}-c${dayCounter + 1}`).textContent = i
         document.getElementById(`r${currentRow}-c${dayCounter + 1}`).style.color = 'black'
-        if (currentMonth === today.getMonth() && i === today.getDate()) {
+        if (currentYear === today.getFullYear() && currentMonth === today.getMonth() && i === today.getDate()) {
             document.getElementById(`r${currentRow}-c${dayCounter + 1}`).style.backgroundColor = '#ce9e5b'
         } else {
             document.getElementById(`r${currentRow}-c${dayCounter + 1}`).style.backgroundColor = '#b5dcdd'
@@ -167,7 +165,15 @@ function renderCourseToDate(courses, row, column) {
 }
 
 if (userId) {
-    document.querySelector('#nav-menu .overlay-content').innerHTML = `
+    if (userId === 1 || userId === 3) {
+        document.querySelector('#nav-menu .overlay-content').innerHTML = `
+            <a href = "./createCourse.html>Create Course</a>
+        `
+    }
+
+    document.querySelector('#nav-menu .overlay-content').innerHTML += `
+        <a href="./yourCourses.html">Your Courses</p>
+        <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {

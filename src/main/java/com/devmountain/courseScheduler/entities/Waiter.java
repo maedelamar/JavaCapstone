@@ -19,23 +19,17 @@ public class Waiter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private LocalDateTime timeApplied;
-
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "user_waiter")
     private User user;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "course_waiter")
     private Course course;
 
     public Waiter(WaiterDto waiterDto) {
         if (waiterDto.getId() != null) {
             this.id = waiterDto.getId();
-        }
-        if (waiterDto.getTimeApplied() != null) {
-            this.timeApplied = waiterDto.getTimeApplied();
         }
     }
 }
