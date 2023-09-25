@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findAllByInstructor(User instructor);
 
-    List<Course> findAllByNameContainsIgnoreCaseOrderByStartTimeDesc(String search);
+    List<Course> findAllByNameContainsIgnoreCaseOrderByStartTime(String search);
 
     Optional<Course> findTopByOrderByNumberDesc();
 
-    List<Course> findAllByStartTimeGreaterThanOrderByStartTimeDesc(LocalDateTime time);
+    List<Course> findAllByStartTimeGreaterThanOrderByStartTime(LocalDateTime time);
 }

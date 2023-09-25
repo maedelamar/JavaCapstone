@@ -151,13 +151,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseDto> getUpcomingCourses() {
         List<Course> courses = courseRepository
-                                .findAllByStartTimeGreaterThanOrderByStartTimeDesc(LocalDateTime.now());
+                                .findAllByStartTimeGreaterThanOrderByStartTime(LocalDateTime.now());
         return courses.stream().map(course -> new CourseDto(course)).toList();
     }
 
     @Override
     public List<CourseDto> getSearchedCourses(String search) {
-        List<Course> courses = courseRepository.findAllByNameContainsIgnoreCaseOrderByStartTimeDesc(search);
+        List<Course> courses = courseRepository.findAllByNameContainsIgnoreCaseOrderByStartTime(search);
         return courses.stream().map(course -> new CourseDto(course)).toList();
     }
 

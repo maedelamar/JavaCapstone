@@ -132,7 +132,7 @@ function displayUpcomingCourses(courses) {
             <button class="btn btn-primary" onclick="${giveBtnOnclick(course.id, course.size, isInstructor)}">
                 ${isInstructor ? 'Stats' : 'Enroll'}
             </button>
-            ${isInstructor ? `<button class="btn btn-danger" onclick="deleteCourse(${course.id})">Delete</button>` : ''}
+            ${(isInstructor || permission >= 2) ? `<button class="btn btn-danger" onclick="deleteCourse(${course.id})">Delete</button>` : ''}
         `
 
         document.getElementById('upcoming-course-section').appendChild(card)

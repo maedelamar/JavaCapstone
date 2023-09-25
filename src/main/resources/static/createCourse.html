@@ -43,11 +43,14 @@
             <div class="form-group">
                 <label for="course-start-time-input">Date and Time: </label>
                 <input type="datetime-local" id="course-start-time-input" name="course-start-time-input">
-            </div>
-            <div class="form-group">
                 <label for="course-length-input">Duration (In Minutes): </label>
                 <input type="number" id="course-length-input">
             </div>
+            <div class="form-group">
+                <input type="checkbox" id="course-repeating-weekly-check">
+                <label for="course-repeating-weekly-check">Repeat Weekly</label>
+            </div>
+            <div class="form-group" id="weekly-form-group"></div>
             <div class="mt-1">
                 <a href="./home.html" class="btn btn-danger">Back</a>
                 <button class="btn btn-primary" type="submit">Submit</button>

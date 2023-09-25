@@ -93,6 +93,7 @@ async function deleteCourse(id) {
     if (response.status === 200) {
         alert('Course Deleted')
         getInstructorCourses()
+        getUserAsStudents()
     }
 }
 
@@ -151,7 +152,7 @@ function displayYourCourses(courses) {
             <button class="btn btn-primary" onclick=${giveBtnOnclick(course.id, course.size, isInstructor)}>
                 ${isInstructor ? 'Stats' : 'Enroll'}
             </button>
-            ${isInstructor ? `<button class="btn btn-danger" onclick="deleteCourse(${course.id})">Delete</button>` : ''}
+            ${(isInstructor || permission >= 2) ? `<button class="btn btn-danger" onclick="deleteCourse(${course.id})">Delete</button>` : ''}
         `
 
         document.getElementById('your-course-section').appendChild(card)
