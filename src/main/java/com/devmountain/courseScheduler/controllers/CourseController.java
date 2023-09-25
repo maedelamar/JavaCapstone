@@ -68,4 +68,9 @@ public class CourseController {
     public List<CourseDto> getPastCourses(@PathVariable Long userId) {
         return courseService.getPastCourses(userId);
     }
+
+    @GetMapping("/byNumber/{number}")
+    public Optional<CourseDto> getLatestCourseSharingNumber(@PathVariable Long number) {
+        return courseService.getLatestCourseSharingNumber(number);
+    }
 }

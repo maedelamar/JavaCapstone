@@ -17,4 +17,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findTopByOrderByNumberDesc();
 
     List<Course> findAllByStartTimeGreaterThanOrderByStartTime(LocalDateTime time);
+
+    Optional<Course> findTopByNumberOrderByStartTimeDesc(Long number);
 }

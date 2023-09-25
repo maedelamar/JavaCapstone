@@ -233,4 +233,15 @@ public class CourseServiceImpl implements CourseService {
         filteredCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
         return filteredCourses;
     }
+
+    @Override
+    public Optional<CourseDto> getLatestCourseSharingNumber(Long number) {
+        Optional<Course> courseOptional = courseRepository.findTopByNumberOrderByStartTimeDesc(number);
+
+        if (courseOptional.isPresent()) {
+            return Optional.of(new CourseDto(courseOptional.get()));
+        }
+
+        return Optional.empty();
+    }
 }

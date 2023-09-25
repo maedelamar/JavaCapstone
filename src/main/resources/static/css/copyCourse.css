@@ -1,0 +1,20 @@
+main {
+    background-color: #2c6b96;
+    height: 125vh;
+}
+
+#create-course-form {
+    width: 40vw;
+    background-color: #b5dcdd;
+    margin: auto;
+    padding: 5vh 18vh;
+}
+
+#create-course-form > h2 {
+    text-align: center;
+    margin-bottom: 3vh;
+}
+
+.form-group {
+    margin-bottom: 3vh;
+}

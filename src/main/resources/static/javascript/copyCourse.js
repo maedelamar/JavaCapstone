@@ -12,15 +12,26 @@ document.getElementById('course-error-text').innerHTML = ''
 
 let highestCourseNumber = 0;
 let weekly = false
+let course
 
-async function getHighestCourseNumber() {
-    await fetch(`${baseURL}/number/highest`, {
+const query = document.URL.split("?")[1]
+const courseNumber = +query.split("=")[1]
+
+async function getLatestCourseFromNumber() {
+    await fetch(`${baseURL}/byNumber/${courseNumber}`, {
         method: "GET",
         headers
     })
     .then(res => res.json())
-    .then(highest => highestCourseNumber = highest)
+    .then(data => renderOldValues(data))
     .catch(err => console.log(err))
+}
+
+function renderOldValues(course) {
+    document.getElementById('course-name-input').value = course.name
+    document.getElementById('course-description-input').value = course.description
+    document.getElementById('course-location-input').value = course.location
+    document.getElementById('course-size-input').value = course.size
 }
 
 function calculateEndTime(startTime, duration) {
@@ -134,12 +145,10 @@ async function handleCourseCreation(e) {
         imageURL = 'https://images.pond5.com/male-tutor-teaching-university-students-footage-040447646_iconl.jpeg'
     }
 
-    getHighestCourseNumber()
-
     const bodyObj = {
         name: nameInput.value,
         description: descriptionInput.value,
-        number: highestCourseNumber + 1,
+        number: courseNumber,
         imageURL,
         size: sizeInput.value,
         startTime: startTimeInput.value,
@@ -195,6 +204,8 @@ async function handleCourseCreation(e) {
         durationInput.value = ''
     }
 }
+
+getLatestCourseFromNumber()
 
 repeatingWeeklyCheck.addEventListener('click', () => handleWeeklyOption(repeatingWeeklyCheck.checked))
 

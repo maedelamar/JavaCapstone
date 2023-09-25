@@ -32,4 +32,6 @@ public interface CourseService {
     List<CourseDto> getCoursesByDateAndUser(String dateAsString, Long userId);
 
     List<CourseDto> getPastCourses(Long userId);
+
+    Optional<CourseDto> getLatestCourseSharingNumber(Long number);
 }

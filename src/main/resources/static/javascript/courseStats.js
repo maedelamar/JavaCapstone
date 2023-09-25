@@ -110,6 +110,8 @@ function renderStats(course) {
         document.getElementById('stats-container').appendChild(toAttendanceBtn)
     }
 
+    document.getElementById('copy-course-btn').addEventListener('click', () => location.replace(`./copyCourse.html?number=${course.number}`))
+
     if (course.notes) {
         document.getElementById('stats-notes-content-container').innerHTML = `
             <p>Notes:</p>
