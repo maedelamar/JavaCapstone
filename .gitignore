@@ -34,3 +34,6 @@ build/
 
 ### Node Modules ###
 node_modules
+
+### Written Files ###
+emailList.txt

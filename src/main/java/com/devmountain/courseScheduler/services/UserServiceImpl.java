@@ -12,6 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,6 +70,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return response;
+    }
+
+    @Override
+    @Transactional
+    public void writeEmails(List<String> emails) {
+        File file = new File("emailList.txt");
+
+        try {
+            FileWriter fw = new FileWriter("emailList.txt", true);
+            PrintWriter pw = new PrintWriter(fw);
+            for (String email : emails) {
+                pw.println(email);
+            }
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

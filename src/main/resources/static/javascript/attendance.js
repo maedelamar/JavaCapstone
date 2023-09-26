@@ -69,6 +69,31 @@ async function getUsersFromStudents(students) {
         .then(res => res.json())
         .then(data => {
             studentUsers.push(data)
+
+            if (studentUsers.length > 0) {
+                const downloadEmailsBtn = document.createElement('button')
+                downloadEmailsBtn.classList.add('btn', 'btn-secondary')
+                downloadEmailsBtn.id = 'get-emails-btn'
+                downloadEmailsBtn.type = 'button'
+                downloadEmailsBtn.textContent = 'Download Emails'
+            
+                const emailList = studentUsers.map(user => user.email)
+                console.log(emailList)
+                downloadEmailsBtn.addEventListener('click', () => writeEmails(emailList))
+            
+                const submitBtn = document.createElement('button')
+                submitBtn.classList.add('btn', 'btn-primary')
+                submitBtn.type = 'submit'
+                submitBtn.textContent = 'Submit'
+            
+                attendanceForm.appendChild(downloadEmailsBtn)
+                attendanceForm.appendChild(submitBtn)
+            } else {
+                document.querySelector('main').innerHTML = `
+                    <h1 id="no-students-text">This Course Has No Students</h1>
+                `
+            }
+
             renderStudent(data, student.id)
         })
         .catch(err => console.log(err))
@@ -139,10 +164,17 @@ function renderStudent(user, studentId) {
     studentAttendanceContainer.appendChild(studentContainer)
 }
 
+async function writeEmails(emails) {
+    await fetch(`${baseURL}/users/write/emails`, {
+        method: "POST",
+        body: JSON.stringify(emails),
+        headers
+    })
+    .catch(err => console.log(err))
+}
+
 async function handleSubmit(e) {
     e.preventDefault()
-
-    let hasStudents = false
 
     const studentPresentSelectors = document.querySelectorAll('.student-present-selector')
     for (let studentPresentSelector of studentPresentSelectors) {
@@ -168,22 +200,6 @@ async function handleSubmit(e) {
             alert("Attendance Submitted")
             location.replace(`./finalizeCourseStats.html?course=${courseId}`)
         }
-    }
-
-    if (hasStudents) {
-        const downloadEmailsBtn = document.createElement('button')
-        downloadEmailsBtn.classList.add('btn', 'btn-secondary')
-        downloadEmailsBtn.id = 'get-emails-btn'
-        downloadEmailsBtn.type = 'button'
-        downloadEmailsBtn.textContent = 'Download Emails'
-
-        const submitBtn = document.createElement('button')
-        submitBtn.classList.add('btn', 'btn-primary')
-        submitBtn.type = 'submit'
-        submitBtn.textContent = 'Submit'
-
-        attendanceForm.appendChild(downloadEmailsBtn)
-        attendanceForm.appendChild(submitBtn)
     }
 }
 

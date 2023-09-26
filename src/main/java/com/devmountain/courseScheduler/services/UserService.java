@@ -10,6 +10,8 @@ public interface UserService {
 
     List<String> login(UserDto userDto);
 
+    void writeEmails(List<String> emails);
+
     List<String> updateUser(UserDto userDto);
 
     List<String> deleteUserById(Long userId);
