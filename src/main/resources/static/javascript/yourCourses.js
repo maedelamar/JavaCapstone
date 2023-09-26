@@ -262,6 +262,7 @@ async function unenroll(courseId) {
         .catch(err => console.log(err))
 
         if (response.status === 200) {
+            alert("You are now enrolled in this course.")
             getInstructorCourses()
             getUserAsStudents()
         }
@@ -295,7 +296,7 @@ async function enterWaitingList(courseId) {
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href = "./createCourse.html>Create Course</a>
+            <a href="./createCourse.html>Create Course</a>
         `
     }
 

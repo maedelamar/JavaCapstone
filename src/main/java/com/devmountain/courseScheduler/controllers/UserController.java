@@ -35,11 +35,6 @@ public class UserController {
         return userService.updateUser(userDto);
     }
 
-    @PutMapping("/permission/{userId}/{newPermission}")
-    public List<String> updateUserPermission(@PathVariable Long userId, @PathVariable Integer newPermission) {
-        return userService.updateUserPermission(userId, newPermission);
-    }
-
     @DeleteMapping("/{userId}")
     public List<String> deleteUserById(@PathVariable Long userId) {
         return userService.deleteUserById(userId);
@@ -58,5 +53,15 @@ public class UserController {
     @GetMapping("/student/{studentId}")
     public Optional<UserDto> getUserByStudentId(@PathVariable Long studentId) {
         return userService.getUserByStudentId(studentId);
+    }
+
+    @GetMapping("/permission/admins")
+    public List<UserDto> getAdmins() {
+        return userService.getAdmins();
+    }
+
+    @GetMapping("/email/{email}")
+    public Optional<UserDto> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
     }
 }

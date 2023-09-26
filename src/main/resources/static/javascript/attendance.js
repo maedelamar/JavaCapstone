@@ -29,6 +29,8 @@ async function checkIfUserIsInstructor() {
     .catch(err => console.log(err))
 }
 
+let studentUsers = []
+
 const attendanceForm = document.getElementById('attendance-form')
 const studentAttendanceContainer = document.getElementById('student-attendance-container')
 
@@ -65,7 +67,10 @@ async function getUsersFromStudents(students) {
             headers
         })
         .then(res => res.json())
-        .then(data => renderStudent(data, student.id))
+        .then(data => {
+            studentUsers.push(data)
+            renderStudent(data, student.id)
+        })
         .catch(err => console.log(err))
     }
 }
@@ -137,8 +142,12 @@ function renderStudent(user, studentId) {
 async function handleSubmit(e) {
     e.preventDefault()
 
+    let hasStudents = false
+
     const studentPresentSelectors = document.querySelectorAll('.student-present-selector')
     for (let studentPresentSelector of studentPresentSelectors) {
+        hasStudents = true
+
         const selectorValue = studentPresentSelector.value
         const studentId = selectorValue.split(' ')[0]
         const attended = selectorValue.split(' ')[1]
@@ -160,12 +169,28 @@ async function handleSubmit(e) {
             location.replace(`./finalizeCourseStats.html?course=${courseId}`)
         }
     }
+
+    if (hasStudents) {
+        const downloadEmailsBtn = document.createElement('button')
+        downloadEmailsBtn.classList.add('btn', 'btn-secondary')
+        downloadEmailsBtn.id = 'get-emails-btn'
+        downloadEmailsBtn.type = 'button'
+        downloadEmailsBtn.textContent = 'Download Emails'
+
+        const submitBtn = document.createElement('button')
+        submitBtn.classList.add('btn', 'btn-primary')
+        submitBtn.type = 'submit'
+        submitBtn.textContent = 'Submit'
+
+        attendanceForm.appendChild(downloadEmailsBtn)
+        attendanceForm.appendChild(submitBtn)
+    }
 }
 
 if (userId) {
-    if (permission === 1 || permission === 3) {
+    if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href = "./createCourse.html>Create Course</a>
+            <a href="./createCourse.html>Create Course</a>
         `
     }
 

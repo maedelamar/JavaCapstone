@@ -90,6 +90,14 @@ footer {
     z-index: 3;
 }
 
+footer .btn-link {
+    color: #ce9e5b;
+}
+
+footer .btn-link:hover {
+    color: #e7ccb1;
+}
+
 .overlay {
     height: 100vh;
     width: 0;

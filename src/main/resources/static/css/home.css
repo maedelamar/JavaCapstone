@@ -7,3 +7,52 @@ main {
 main > h3 {
     color: #2c6b96;
 }
+
+.top-overlay {
+    height: 0;
+    width: 100vw;
+    position: fixed;
+    z-index: 6;
+    right: 0;
+    top: 0;
+    background-color: #b5dcdd;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.top-overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 3vh;
+}
+
+.top-overlay a {
+    padding: 0.8vh 0.4vw;
+    text-decoration: none;
+    font-size: 36px;
+    color: #ce9e5b;
+    display: block;
+    transition: 0.3s;
+}
+
+.top-overlay a:hover, .overlay a:focus {
+    color: #e7ccb1;
+}
+
+.top-overlay .close-btn {
+    position: absolute;
+    top: 1.8vh;
+    right: 2.3vw;
+    font-size: 60px;
+}
+
+@media screen and (max-height: 41.6vh) {
+    .top-overlay a {font-size: 20px;}
+    .top-overlay .close-btn {
+        font-size: 40px;
+        top: 1.4vh;
+        right: 1.8vw;
+    }
+}

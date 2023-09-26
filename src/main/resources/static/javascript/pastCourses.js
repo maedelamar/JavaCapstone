@@ -95,9 +95,9 @@ function displayPastCourses(courses) {
 }
 
 if (userId) {
-    if (permission === 1 || permission === 3) {
+    if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href = "./createCourse.html>Create Course</a>
+            <a href="./createCourse.html>Create Course</a>
         `
     }
 

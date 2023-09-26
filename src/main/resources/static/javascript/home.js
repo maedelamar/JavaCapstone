@@ -3,6 +3,7 @@ const headers = {"Content-Type":"application/json"}
 
 let userId = 0
 let permission = -1
+let adminEmail
 
 if (document.cookie) {
     const cookieArr = document.cookie.split(";")
@@ -28,6 +29,62 @@ function openNav() {
 
 function closeNav() {
     document.getElementById('nav-menu').style.width = '0'
+}
+
+function openAddInstructor() {
+    if (permission < 2) {
+        return
+    }
+
+    document.getElementById('add-instructor-form').addEventListener('submit', handleAddInstructor)
+
+    document.getElementById('add-instructor-overlay').style.height = '100vh'
+}
+
+function closeAddInstructor() {
+    document.getElementById('add-instructor-overlay').style.height = '0'
+}
+
+function openRemoveInstructor() {
+    if (permission < 2) {
+        return
+    }
+
+    document.getElementById('remove-instructor-form').addEventListener('submit', handleRemovePrivilege)
+
+    document.getElementById('remove-instructor-overlay').style.height = '100vh'
+}
+
+function closeRemoveInstructor() {
+    document.getElementById('remove-instructor-overlay').style.height = '0'
+}
+
+function openRemoveUser() {
+    if (permission < 2) {
+        return
+    }
+
+    document.getElementById('remove-user-form').addEventListener('submit', handleRemoveUser)
+
+    document.getElementById('remove-user-overlay').style.height = '100vh'
+}
+
+function closeRemoveUser() {
+    document.getElementById('remove-user-overlay').style.height = '0'
+}
+
+function openAddAdmin() {
+    if (permission < 3) {
+        return
+    }
+
+    document.getElementById('add-admin-form').addEventListener('submit', handleAddAdmin)
+
+    document.getElementById('add-admin-overlay').style.height = '100vh'
+}
+
+function closeAddAdmin() {
+    document.getElementById('add-admin-overlay').style.height = '0'
 }
 
 function convertDateStringToDay(dateString) {
@@ -178,6 +235,7 @@ async function enroll(courseId) {
     .catch(err => console.log(err))
 
     if (response.status === 200) {
+        alert("You are now enrolled in this course.")
         getUpcomingCourses()
     }
 }
@@ -235,10 +293,167 @@ async function enterWaitingList(courseId) {
     }
 }
 
+async function getRandomAdminEmail() {
+    await fetch(`${baseURL}/users/permission/admins`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => {
+        const randomAdmin = Math.floor(Math.random() * data.length)
+        adminEmail = data[randomAdmin].email
+    })
+    .catch(err => console.log(err))
+}
+
+async function handleAddInstructor(e) {
+    e.preventDefault()
+
+    if (permission < 2) {
+        return
+    }
+
+    const emailValue = document.getElementById('instructor-email-input').value
+
+    await fetch(`${baseURL}/users/email/${emailValue}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(async function(data) {
+        if (data.permission >= 1) {
+            alert("This user already has instructor privileges.")
+            return
+        }
+
+        const bodyObj = {
+            id: data.id,
+            permission: 1
+        }
+
+        const response = await fetch(`${baseURL}/users`, {
+            method: "PUT",
+            body: JSON.stringify(bodyObj),
+            headers
+        })
+        .catch(err => console.log(err))
+
+        if (response.status === 200) {
+            alert(`${data.firstName} ${data.lastName} is now an instructor.`)
+            location.reload()
+        }
+    })
+    .catch(err => console.log(err))
+}
+
+async function handleRemovePrivilege(e) {
+    e.preventDefault()
+
+    if (permission < 2) {
+        return
+    }
+
+    const emailValue = document.getElementById('remove-instructor-email-input').value
+
+    await fetch(`${baseURL}/users/email/${emailValue}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(async function(data) {
+        if (permission <= data.permission) {
+            alert("You do not have permission to revoke permissions form this user.")
+            return
+        }
+
+        const bodyObj = {
+            id: data.id,
+            permission: 0
+        }
+
+        const response = await fetch(`${baseURL}/users`, {
+            method: "PUT",
+            body: JSON.stringify(bodyObj),
+            headers
+        })
+        .catch(err => console.log(err))
+
+        if (response.status === 200) {
+            alert(`${data.firstName} ${data.lastName}'s privileges have been revoked.`)
+            location.reload()
+        }
+    })
+    .catch(err => console.log(err))
+}
+
+async function handleAddAdmin(e) {
+    e.preventDefault()
+
+    if (permission < 3) {
+        return
+    }
+
+    const emailValue = document.getElementById('admin-email-input').value
+
+    await fetch(`${baseURL}/users/email/${emailValue}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(async function(data) {
+        const bodyObj = {
+            id: data.id,
+            permission: 2
+        }
+
+        const response = await fetch(`${baseURL}/users`, {
+            method: "PUT",
+            body: JSON.stringify(bodyObj),
+            headers
+        })
+        .catch(err => console.log(err))
+
+        if (response.status === 200) {
+            alert(`${data.firstName} ${data.lastName} is now an administrator.`)
+            location.reload()
+        }
+    })
+    .catch(err => console.log(err))
+}
+
+async function handleRemoveUser(e) {
+    e.preventDefault()
+
+    if (permission < 2) {
+        return
+    }
+
+    const emailValue = document.getElementById('remove-user-email-input').value
+
+    await fetch(`${baseURL}/users/email/${emailValue}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(async function(data) {
+        const response = await fetch(`${baseURL}/users/${data.id}`, {
+            method: "DELETE",
+            headers
+        })
+        .catch(err => console.log(err))
+
+        if (response.status === 200) {
+            alert(`${data.firstName} ${data.lastName} has been deleted.`)
+            location.reload()
+        }
+    })
+    .catch(err => console.log(err))
+}
+
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href = "./createCourse.html">Create Course</a>
+            <a href="./createCourse.html">Create Course</a>
         `
     }
 
@@ -248,11 +463,34 @@ if (userId) {
         <a href="./calendar.html">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
+
+    if (permission >= 2) {
+        document.querySelector('#nav-menu .overlay-content').innerHTML += `
+            <a href="#" onclick="openAddInstructor()">Add Instructor</a>
+            <a href="#" onclick="openRemoveInstructor()">Revoke User Privilege</a>
+            <a href="#" onclick="openRemoveUser()">Delete User</a>
+        `
+    }
+
+    if (permission >= 3) {
+        document.querySelector('#nav-menu .overlay-content').innerHTML += `
+            <a href="#" onclick="openAddAdmin()">Add Administrator</a>
+        `
+    }
+
+    getRandomAdminEmail()
+
+    document.querySelector('footer').innerHTML = `
+        <a href="mailto:${adminEmail}" class="btn btn-link" id="become-instructor-link">Become an Instructor</a>
+        <a href="mailto:${adminEmail}" class="btn btn-link" id="become-admin-link">Become an Administrator</a>
+    `
 } else {
     document.querySelector('#nav-menu .overlay-content').innerHTML = `
         <a href="./login.html">Login</a>
         <a href="./register.html">Register</a>
     `
+
+    document.querySelector('footer').innerHTML = ''
 }
 
 getUpcomingCourses()

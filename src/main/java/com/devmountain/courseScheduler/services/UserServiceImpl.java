@@ -98,19 +98,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<String> updateUserPermission(Long userId, Integer permission) {
-        List<String> response = new ArrayList<>();
-        Optional<User> userOptional = userRepository.findById((userId));
-        userOptional.ifPresent(user -> {
-            user.setPermission(permission);
-            userRepository.saveAndFlush(user);
-        });
-        response.add("Permission Updated");
-        return response;
-    }
-
-    @Override
-    @Transactional
     public List<String> deleteUserById(Long userId) {
         List<String> response = new ArrayList<>();
         Optional<User> userOptional = userRepository.findById(userId);
@@ -156,6 +143,21 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+        return Optional.empty();
+    }
+
+    @Override
+    public List<UserDto> getAdmins() {
+        List<User> users = userRepository.findAllByPermissionGreaterThanEqual(2);
+        return users.stream().map(user -> new UserDto(user)).toList();
+    }
+
+    @Override
+    public Optional<UserDto> getUserByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return Optional.of(new UserDto(userOptional.get()));
+        }
         return Optional.empty();
     }
 }

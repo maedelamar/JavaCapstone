@@ -18,6 +18,70 @@
         </div>
     </div>
 
+    <div class="top-overlay" id="add-instructor-overlay">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeAddInstructor()">&times;</a>
+
+        <div class="overlay-content">
+            <form id="add-instructor-form">
+                <div class="form-group">
+                    <label for="instructor-email-input">Email of User Becoming Instructor: </label>
+                    <input type="text" id="instructor-email-input">
+                </div>
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="top-overlay" id="remove-instructor-overlay">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeRemoveInstructor()">&times;</a>
+
+        <div class="overlay-content">
+            <form id="remove-instructor-form">
+                <div class="form-group">
+                    <label for="remove-instructor-email-input">Email of User Removing as Instructor: </label>
+                    <input type="text" id="remove-instructor-email-input">
+                </div>
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="top-overlay" id="remove-user-overlay">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeRemoveUser()">&times;</a>
+
+        <div class="overlay-content">
+            <form id="remove-user-form">
+                <div class="form-group">
+                    <label for="remove-user-email-input">Email of User Removed: </label>
+                    <input type="text" id="remove-user-email-input">
+                </div>
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="top-overlay" id="add-admin-overlay">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeAddAdmin()">&times;</a>
+
+        <div class="overlay-content">
+            <form id="add-admin-form">
+                <div class="form-group">
+                    <label for="admin-email-input">Email of User Becoming Administrator: </label>
+                    <input type="text" id="admin-email-input">
+                </div>
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <header>
         <h1>TrainUp</h1>
         <button id="home-overlay-btn" class="btn btn-primary overlay-btn" onclick="openNav()">
@@ -42,7 +106,7 @@
     </main>
     
     <footer>
-
+        
     </footer>
 
     <script src="./javascript/home.js"></script>
