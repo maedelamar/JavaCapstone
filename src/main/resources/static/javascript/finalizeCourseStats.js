@@ -13,6 +13,22 @@ if (document.cookie) {
 const urlQuery = document.URL.split("?")[1]
 const courseId = +urlQuery.split("=")[1]
 
+checkIfUserIsInstructor()
+
+async function checkIfUserIsInstructor() {
+    await fetch(`${baseURL}/courses/${courseId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (userId !== data.instructorId) {
+            location.replace('./home.html')
+        }
+    })
+    .catch(err => console.log(err))
+}
+
 function handleLogout() {
     let c = document.cookie.split(";")
     for (let i in c) {

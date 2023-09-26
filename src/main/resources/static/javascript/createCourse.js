@@ -4,6 +4,10 @@ const headers = {"Content-Type":"application/json"}
 const cookies = document.cookie.split(";")
 const userId = +cookies[0].split("=")[1]
 
+if (userId < 1) {
+    location.replace('./home.html')
+}
+
 const createCourseForm = document.getElementById('create-course-form')
 const repeatingWeeklyCheck = document.getElementById('course-repeating-weekly-check')
 const weeklyFormGroup = document.getElementById('weekly-form-group')

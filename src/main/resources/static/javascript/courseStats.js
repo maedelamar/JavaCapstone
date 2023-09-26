@@ -13,6 +13,22 @@ if (document.cookie) {
 const urlQuery = document.URL.split("?")[1]
 const courseId = +urlQuery.split("=")[1]
 
+checkIfUserIsInstructor()
+
+async function checkIfUserIsInstructor() {
+    await fetch(`${baseURL}/courses/${courseId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (userId !== data.instructorId) {
+            location.replace('./home.html')
+        }
+    })
+    .catch(err => console.log(err))
+}
+
 let instructor = {}
 let studentCount = 0
 let attendedCount = 0
@@ -110,7 +126,7 @@ function renderStats(course) {
         document.getElementById('stats-container').appendChild(toAttendanceBtn)
     }
 
-    document.getElementById('copy-course-btn').addEventListener('click', () => location.replace(`./copyCourse.html?number=${course.number}`))
+    document.getElementById('copy-course-btn').addEventListener('click', () => location.replace(`./copyCourse.html?course=${course.id}&number=${course.number}`))
 
     if (course.notes) {
         document.getElementById('stats-notes-content-container').innerHTML = `

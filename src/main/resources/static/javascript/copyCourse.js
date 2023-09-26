@@ -15,7 +15,24 @@ let weekly = false
 let course
 
 const query = document.URL.split("?")[1]
-const courseNumber = +query.split("=")[1]
+const courseId = +query.split('&')[0].split('=')[1]
+const courseNumber = +query.split("&")[1].split('=')[1]
+
+checkIfUserIsInstructor()
+
+async function checkIfUserIsInstructor() {
+    await fetch(`${baseURL}/${courseId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (userId !== data.instructorId) {
+            location.replace('./home.html')
+        }
+    })
+    .catch(err => console.log(err))
+}
 
 async function getLatestCourseFromNumber() {
     await fetch(`${baseURL}/byNumber/${courseNumber}`, {
