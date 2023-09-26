@@ -171,4 +171,21 @@ public class StudentServiceImpl implements StudentService {
             return 0L;
         }
     }
+
+    @Override
+    public Optional<StudentDto> getStudentFromUserAndCourse(Long userId, Long courseId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+
+        if (userOptional.isPresent() && courseOptional.isPresent()) {
+            Optional<Student> studentOptional =
+                    studentRepository.findByUserAndCourse(userOptional.get(), courseOptional.get());
+
+            if (studentOptional.isPresent()) {
+                return Optional.of(new StudentDto(studentOptional.get()));
+            }
+        }
+
+        return Optional.empty();
+    }
 }

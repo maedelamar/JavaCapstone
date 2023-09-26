@@ -30,4 +30,6 @@ public interface StudentService {
     Long getCountCourse(Long courseId);
 
     Long getCountAttended(Long courseId);
+
+    Optional<StudentDto> getStudentFromUserAndCourse(Long userId, Long courseId);
 }

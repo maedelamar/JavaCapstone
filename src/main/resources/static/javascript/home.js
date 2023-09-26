@@ -10,8 +10,9 @@ if (document.cookie) {
     permission = +cookieArr[1].split("=")[1]
 }
 
-let currentStudentCount = 0
-let instructorName = ''
+let studentCounts = []
+let instructorNames = []
+let userInCourse = []
 
 function handleLogout() {
     let c = document.cookie.split(";")
@@ -41,9 +42,21 @@ function convertDateStringToTime(dateString) {
     if (hour > 12) {
         hour -= 12
         meridiem = 'pm'
+    } else if (hour === 12) {
+        meridiem = 'pm'
     }
 
     return hour + ':' + String(dateSringAsDate.getMinutes()).padStart(2, '0') + meridiem
+}
+
+async function checkIfUserInCourse(courseId) {
+    await fetch(`${baseURL}/students/user/${userId}/course/${courseId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => userInCourse.push(Boolean(data)))
+    .catch(err => console.log(err))
 }
 
 async function getStudentCount(courseId) {
@@ -52,7 +65,7 @@ async function getStudentCount(courseId) {
         headers
     })
     .then(res => res.json())
-    .then(data => currentStudentCount = data)
+    .then(data => studentCounts.push(data))
     .catch(err => console.log(err))
 }
 
@@ -62,15 +75,18 @@ async function getInstructorName(instructorId) {
         headers
     })
     .then(res => res.json())
-    .then(data => instructorName = `${data.firstName} ${data.lastName}`)
+    .then(data => instructorNames.push(`${data.firstName} ${data.lastName}`))
+    .catch(err => console.log(err))
 }
 
-function giveBtnOnclick(id, size, isInstructor) {
+function giveBtnOnclick(id, size, isInstructor, index) {
     if (isInstructor) {
         return `location.replace('./courseStats.html?course=${id}')`
-    } else if (currentStudentCount < size) {
+    } else if (userInCourse[index]) {
+        return `unenroll(${id})`
+    } else if (studentCounts[index] < size) {
         return `enroll(${id})`
-    } else if (currentStudentCount >= size) {
+    } else if (studentCounts[index] >= size) {
         return `enterWaitingList(${id})`
     } else {
         return ''
@@ -105,34 +121,38 @@ async function getUpcomingCourses() {
     .catch(err => console.log(err))
 }
 
-function displayUpcomingCourses(courses) {
+async function displayUpcomingCourses(courses) {
     document.getElementById('upcoming-course-section').innerHTML = ''
+    userInCourse = []
+    instructorNames = []
+    studentCounts = []
 
-    for (const course of courses) {
+    for (let i = 0; i < courses.length; i++) {
         const card = document.createElement('div')
         card.classList.add('container')
         card.classList.add('course-container')
 
-        getStudentCount(course.id)
-        getInstructorName(course.instructorId)
+        await getStudentCount(courses[i].id)
+        await getInstructorName(courses[i].instructorId)
+        await checkIfUserInCourse(courses[i].id)
 
-        let isInstructor = (userId === course.instructorId)
+        let isInstructor = (userId === courses[i].instructorId)
 
         card.innerHTML = `
-            <img class="course-card-img" src="${course.imageURL}">
-            <p>Name: ${course.name}</p>
-            <p>Size: ${course.size}</p>
-            <p>Location: ${course.location}</p>
-            <p>Instructor: ${instructorName}</p>
-            <p>${course.description}</p>
+            <img class="course-card-img" src="${courses[i].imageURL}">
+            <p>Name: ${courses[i].name}</p>
+            <p>Size: ${courses[i].size}</p>
+            <p>Location: ${courses[i].location}</p>
+            <p>Instructor: ${instructorNames[i]}</p>
+            <p>${courses[i].description}</p>
             <p>
-            ${convertDateStringToDay(course.startTime)} 
-            ${convertDateStringToTime(course.startTime)} - ${convertDateStringToTime(course.endTime)}
+            ${convertDateStringToDay(courses[i].startTime)} 
+            ${convertDateStringToTime(courses[i].startTime)} - ${convertDateStringToTime(courses[i].endTime)}
             </p>
-            <button class="btn btn-primary" onclick="${giveBtnOnclick(course.id, course.size, isInstructor)}">
-                ${isInstructor ? 'Stats' : 'Enroll'}
+            <button class="btn btn-primary" onclick="${giveBtnOnclick(courses[i].id, courses[i].size, isInstructor, i)}">
+                ${isInstructor ? 'Stats' : (userInCourse[i] ? 'Unenroll' : 'Enroll')}
             </button>
-            ${(isInstructor || permission >= 2) ? `<button class="btn btn-danger" onclick="deleteCourse(${course.id})">Delete</button>` : ''}
+            ${(isInstructor || permission >= 2) ? `<button class="btn btn-danger" onclick="deleteCourse(${courses[i].id})">Delete</button>` : ''}
         `
 
         document.getElementById('upcoming-course-section').appendChild(card)
@@ -145,7 +165,7 @@ async function enroll(courseId) {
         return
     }
 
-    let willEnroll = confirm("Do you want to enroll in this course?")
+    let willEnroll = confirm("Do you want to enroll in this course")
     if (!willEnroll) {
         return
     }
@@ -158,8 +178,38 @@ async function enroll(courseId) {
     .catch(err => console.log(err))
 
     if (response.status === 200) {
-        alert("You are now enrolled in this course.")
+        getUpcomingCourses()
     }
+}
+
+async function unenroll(courseId) {
+    if (!userId) {
+        location.replace('./login.html')
+        return
+    }
+
+    let willUnenroll = confirm("Are you sure you want to unenroll from this course?")
+    if (!willUnenroll) {
+        return
+    }
+
+    await fetch(`${baseURL}/students/user/${userId}/course/${courseId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(async function(data) {
+        const response = await fetch(`${baseURL}/students/${data.id}`, {
+            method: "DELETE",
+            headers
+        })
+        .catch(err => console.log(err))
+
+        if (response.status === 200) {
+            getUpcomingCourses()
+        }
+    })
+    .catch(err => console.log(err))
 }
 
 async function enterWaitingList(courseId) {
@@ -186,7 +236,7 @@ async function enterWaitingList(courseId) {
 }
 
 if (userId) {
-    if (permission === 1 || permission === 3) {
+    if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
             <a href = "./createCourse.html">Create Course</a>
         `
