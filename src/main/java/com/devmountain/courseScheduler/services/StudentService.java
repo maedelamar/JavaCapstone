@@ -11,6 +11,9 @@ public interface StudentService {
     List<String> addStudent(StudentDto studentDto, Long userId, Long courseId);
 
     @Transactional
+    void addFromWaitingList();
+
+    @Transactional
     List<String> updateStudent(StudentDto studentDto);
 
     @Transactional

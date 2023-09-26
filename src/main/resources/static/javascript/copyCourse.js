@@ -191,7 +191,7 @@ async function handleCourseCreation(e) {
             }
         }
 
-        // location.replace("./home.html")
+        location.replace("./home.html")
     } else {
         alert(`Error in creating course: ${response.status}`)
 

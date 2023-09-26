@@ -3,6 +3,7 @@ package com.devmountain.courseScheduler.controllers;
 import com.devmountain.courseScheduler.dtos.StudentDto;
 import com.devmountain.courseScheduler.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,12 @@ public class StudentController {
     @PostMapping("/{courseId}/{userId}")
     public List<String> addStudent(@RequestBody StudentDto studentDto, @PathVariable Long userId, @PathVariable Long courseId) {
         return studentService.addStudent(studentDto, userId, courseId);
+    }
+
+    @Scheduled(fixedRate = 15000)
+    @PostMapping("/fromWaiting")
+    public void addFromWaitingList() {
+        studentService.addFromWaitingList();
     }
 
     @PutMapping

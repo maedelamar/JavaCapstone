@@ -4,9 +4,11 @@ import com.devmountain.courseScheduler.dtos.StudentDto;
 import com.devmountain.courseScheduler.entities.Course;
 import com.devmountain.courseScheduler.entities.Student;
 import com.devmountain.courseScheduler.entities.User;
+import com.devmountain.courseScheduler.entities.Waiter;
 import com.devmountain.courseScheduler.repositories.CourseRepository;
 import com.devmountain.courseScheduler.repositories.StudentRepository;
 import com.devmountain.courseScheduler.repositories.UserRepository;
+import com.devmountain.courseScheduler.repositories.WaiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private WaiterRepository waiterRepository;
+
     @Override
     @Transactional
     public List<String> addStudent(StudentDto studentDto, Long userId, Long courseId) {
@@ -43,6 +48,35 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.saveAndFlush(student);
         response.add("Student Added");
         return response;
+    }
+
+    @Override
+    @Transactional
+    public void addFromWaitingList() {
+        List<String> response = new ArrayList<>();
+
+        List<Course> courses = courseRepository.findAll();
+        if (!courses.isEmpty()) {
+            for (Course course : courses) {
+                if (studentRepository.countByCourse(course) >= course.getSize()) {
+                    continue;
+                }
+
+                Optional<Waiter> waiterOptional = waiterRepository.findTopByCourse(course);
+                if (waiterOptional.isPresent()) {
+                    Optional<User> userOptional = userRepository.findById(waiterOptional.get().getUser().getId());
+
+                    Student student = new Student();
+                    student.setAttended(false);
+                    student.setCourse(course);
+                    userOptional.ifPresent(student::setUser);
+
+                    waiterOptional.ifPresent(waiter -> waiterRepository.delete(waiter));
+
+                    studentRepository.saveAndFlush(student);
+                }
+            }
+        }
     }
 
     @Override
@@ -98,6 +132,7 @@ public class StudentServiceImpl implements StudentService {
 
         if (courseOptional.isPresent()) {
             List<Student> students = studentRepository.findAllByCourse(courseOptional.get());
+            students.sort((o1, o2) -> o2.getUser().getLastName().compareTo(o1.getUser().getLastName()));
             return students.stream().map(student -> new StudentDto(student)).collect(Collectors.toList());
         }
 
