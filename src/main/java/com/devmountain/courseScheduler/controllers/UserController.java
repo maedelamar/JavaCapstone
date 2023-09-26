@@ -30,11 +30,6 @@ public class UserController {
         return userService.login(userDto);
     }
 
-    @PostMapping("/write/emails")
-    public void writeEmails(@RequestBody List<String> emails) {
-        userService.writeEmails(emails);
-    }
-
     @PutMapping
     public List<String> updateUser(@RequestBody UserDto userDto) {
         return userService.updateUser(userDto);

@@ -74,23 +74,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void writeEmails(List<String> emails) {
-        File file = new File("emailList.txt");
-
-        try {
-            FileWriter fw = new FileWriter("emailList.txt", true);
-            PrintWriter pw = new PrintWriter(fw);
-            for (String email : emails) {
-                pw.println(email);
-            }
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    @Transactional
     public List<String> updateUser(UserDto userDto) {
         List<String> response = new ArrayList<>();
         Optional<User> userOptional = userRepository.findById(userDto.getId());

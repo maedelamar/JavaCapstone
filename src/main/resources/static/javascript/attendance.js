@@ -50,6 +50,25 @@ function closeNav() {
     document.getElementById('nav-menu').style.width = '0'
 }
 
+function openEmails(emails) {
+    let emailsAsString = ''
+    for (let i = 0; i < emails.length; i++) {
+        if (i > 0) {
+            emailsAsString += ','
+        }
+
+        emailsAsString += emails[i]
+    }
+
+    document.getElementById('email-text').textContent = emailsAsString
+
+    document.getElementById('email-overlay').style.height = '100vh'
+}
+
+function closeEmails() {
+    document.getElementById('email-overlay').style.height = '0'
+}
+
 async function getStudentsFromCourse() {
     await fetch(`${baseURL}/students/course/${courseId}`, {
         method: "GET",
@@ -69,34 +88,32 @@ async function getUsersFromStudents(students) {
         .then(res => res.json())
         .then(data => {
             studentUsers.push(data)
-
-            if (studentUsers.length > 0) {
-                const downloadEmailsBtn = document.createElement('button')
-                downloadEmailsBtn.classList.add('btn', 'btn-secondary')
-                downloadEmailsBtn.id = 'get-emails-btn'
-                downloadEmailsBtn.type = 'button'
-                downloadEmailsBtn.textContent = 'Download Emails'
-            
-                const emailList = studentUsers.map(user => user.email)
-                console.log(emailList)
-                downloadEmailsBtn.addEventListener('click', () => writeEmails(emailList))
-            
-                const submitBtn = document.createElement('button')
-                submitBtn.classList.add('btn', 'btn-primary')
-                submitBtn.type = 'submit'
-                submitBtn.textContent = 'Submit'
-            
-                attendanceForm.appendChild(downloadEmailsBtn)
-                attendanceForm.appendChild(submitBtn)
-            } else {
-                document.querySelector('main').innerHTML = `
-                    <h1 id="no-students-text">This Course Has No Students</h1>
-                `
-            }
-
             renderStudent(data, student.id)
         })
         .catch(err => console.log(err))
+    }
+
+    if (studentUsers.length > 0) {
+        const emailsBtn = document.createElement('a')
+        emailsBtn.classList.add('btn', 'btn-secondary')
+        emailsBtn.id = 'get-emails-btn'
+        emailsBtn.type = 'button'
+        emailsBtn.textContent = 'Show Emails'
+    
+        const emailList = studentUsers.map(user => user.email)
+        emailsBtn.addEventListener('click', () => openEmails(emailList))
+    
+        const submitBtn = document.createElement('button')
+        submitBtn.classList.add('btn', 'btn-primary')
+        submitBtn.type = 'submit'
+        submitBtn.textContent = 'Submit'
+    
+        attendanceForm.appendChild(emailsBtn)
+        attendanceForm.appendChild(submitBtn)
+    } else {
+        document.querySelector('main').innerHTML = `
+            <h1 id="no-students-text">This Course Has No Students</h1>
+        `
     }
 }
 
@@ -162,15 +179,6 @@ function renderStudent(user, studentId) {
     studentContainer.appendChild(studentBtnContainer)
 
     studentAttendanceContainer.appendChild(studentContainer)
-}
-
-async function writeEmails(emails) {
-    await fetch(`${baseURL}/users/write/emails`, {
-        method: "POST",
-        body: JSON.stringify(emails),
-        headers
-    })
-    .catch(err => console.log(err))
 }
 
 async function handleSubmit(e) {
