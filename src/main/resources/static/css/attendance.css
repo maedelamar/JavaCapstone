@@ -2,6 +2,24 @@ main {
     min-height: 79vh;
 }
 
+#attendance-form {
+    width: 90vw;
+    min-height: 79vh;
+    margin: 0 auto;
+    padding: 2vh 1vw;
+    background-color: #b5dcdd;
+}
+
+#no-students-text {
+    color: #2c6b96;
+    text-align: center;
+}
+
+.student-container {
+    display: flex;
+    justify-content: space-between;
+}
+
 .top-overlay {
     height: 0;
     width: 100vw;

@@ -132,8 +132,8 @@ async function handleCourseCreation(e) {
     }
 
     let imageURL;
-    if (imageInput.src) {
-        imageURL = imageInput.src
+    if (imageInput.files[0]) {
+        imageURL = imageInput.files[0].name
     } else {
         imageURL = 'https://images.pond5.com/male-tutor-teaching-university-students-footage-040447646_iconl.jpeg'
     }
@@ -187,16 +187,6 @@ async function handleCourseCreation(e) {
         }
 
         location.replace("./home.html")
-    } else {
-        alert(`Error in creating course: ${response.status}`)
-
-        nameInput.value = ''
-        descriptionInput.value = ''
-        categoryInput.value = ''
-        locationInput.value = ''
-        sizeInput.value = ''
-        startTimeInput.value = ''
-        durationInput.value = ''
     }
 }
 

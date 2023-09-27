@@ -29,7 +29,7 @@ async function checkIfUserIsInstructor() {
     .catch(err => console.log(err))
 }
 
-let instructor = {}
+let instructorName
 let studentCount = 0
 let attendedCount = 0
 
@@ -55,7 +55,7 @@ async function getInstructorFromId(instructorId) {
         headers
     })
     .then(res => res.json())
-    .then(data => instructor = data)
+    .then(data => instructorName = `${data.firstName} ${data.lastName}`)
     .catch(err => console.log(err))
 }
 
@@ -103,13 +103,13 @@ async function getCourseFromId() {
     .catch(err => console.log(err))
 }
 
-function renderStats(course) {
-    getInstructorFromId(course.instructorId)
-    countStudents(courseId)
-    countAttended(courseId)
+async function renderStats(course) {
+    await getInstructorFromId(course.instructorId)
+    await countStudents(courseId)
+    await countAttended(courseId)
 
     document.getElementById('stats-course-name').textContent = course.name
-    document.getElementById('stats-course-instructor').textContent = `${instructor.firstName} ${instructor.lastName}`
+    document.getElementById('stats-course-instructor').textContent = `${instructorName}`
     document.getElementById('stats-place-and-time').textContent = `Location: ${course.location}     ${getFormattedTime(new Date(course.startTime))} - ${getFormattedTime(new Date(course.endTime))}`
     document.getElementById('stats-description').textContent = course.description
     
@@ -134,7 +134,7 @@ function renderStats(course) {
             <p>${course.notes}</p>
         `
     } else {
-        document.getElementById('stats-notes-content-container').innerHTML = '<p>The instructor for this course has not left any notes.</p>'
+        document.getElementById('stats-notes-content-container').innerHTML = '<p>You have not left any notes.</p>'
     }
 }
 

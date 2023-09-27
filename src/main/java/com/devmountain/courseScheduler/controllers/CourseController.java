@@ -73,4 +73,9 @@ public class CourseController {
     public Optional<CourseDto> getLatestCourseSharingNumber(@PathVariable Long number) {
         return courseService.getLatestCourseSharingNumber(number);
     }
+
+    @GetMapping("/number/{number}/rating")
+    public Double getAvgRatingByNumber(@PathVariable Long number) {
+         return courseService.getAvgRatingByNumber(number);
+    }
 }

@@ -112,12 +112,12 @@ async function getUsersFromStudents(students) {
         attendanceForm.appendChild(submitBtn)
     } else {
         document.querySelector('main').innerHTML = `
-            <h1 id="no-students-text">This Course Has No Students</h1>
+            <h2 id="no-students-text">This Course Has No Students</h2>
         `
     }
 }
 
-async function deleteStudent(studentId) {
+async function deleteStudent(studentId, index) {
     const response = await fetch(`${baseURL}/students/${studentId}`, {
         method: "DELETE",
         headers
@@ -126,6 +126,7 @@ async function deleteStudent(studentId) {
 
     if (response.status === 200) {
         studentAttendanceContainer.innerHTML = ''
+        studentUsers.splice(index, 1)
 
         getStudentsFromCourse()
     }
@@ -133,6 +134,7 @@ async function deleteStudent(studentId) {
 
 function renderStudent(user, studentId) {
     const studentContainer = document.createElement('div')
+    studentContainer.className = 'student-container'
 
     const studentInfo = document.createElement('p')
     studentInfo.textContent = `${user.firstName} ${user.lastName}, ${user.email}`
@@ -161,6 +163,7 @@ function renderStudent(user, studentId) {
 
     const deleteStudentBtn = document.createElement('button')
     deleteStudentBtn.classList.add('btn', 'btn-danger')
+    deleteStudentBtn.type = 'button'
     deleteStudentBtn.addEventListener('click', () => {
         let willDelete = confirm(`Are you sure that you want to remove ${user.firstName} ${user.lastName} from your class?`)
         if (willDelete) {
@@ -189,8 +192,8 @@ async function handleSubmit(e) {
         hasStudents = true
 
         const selectorValue = studentPresentSelector.value
-        const studentId = selectorValue.split(' ')[0]
-        const attended = selectorValue.split(' ')[1]
+        const studentId = +selectorValue.split(' ')[0]
+        const attended = +selectorValue.split(' ')[1]
 
         const bodyObj = {
             id: studentId,

@@ -1,7 +1,6 @@
 #stats-container {
     background-color: #b5dcdd;
     width: 90vw;
-    height: 72vh;
     margin: 0 auto;
     padding: 10vh 10vw;
 }
@@ -12,13 +11,17 @@
 
 #stats-size {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 #notes-form {
     background-color: #b5dcdd;
     width: 90vw;
     height: 72vh;
-    margin: 5vh auto;
-    padding: 10vh 10vw;
+    margin: 0 auto 5vh;
+    padding: 2vh 10vw;
+}
+
+textarea {
+    width: 97.5%;
 }

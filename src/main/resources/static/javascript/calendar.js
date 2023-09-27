@@ -44,10 +44,9 @@ async function getUserCoursesByDate(date, row, column) {
 }
 
 function openCourseOverlay(courses) {
-    console.log("openCourseOverlay() called")
+    document.getElementById('calendar-course-overlay').style.height = '100vh'
 
-    document.getElementById('calendar-course-overlay').style.width = '100vw'
-    console.log("Course overlay width changed")
+    document.querySelector('#calendar-course-overlay .overlay-content').innerHTML = ''
 
     for (let course of courses) {
         let startMeridiem = 'am'
@@ -56,6 +55,8 @@ function openCourseOverlay(courses) {
         let startMinute = String(startTime.getMinutes()).padStart(2, '0')
         if (startHour > 12) {
             startHour -= 12
+            startMeridiem = 'pm'
+        } else if (startHour === 12) {
             startMeridiem = 'pm'
         }
 
@@ -66,12 +67,14 @@ function openCourseOverlay(courses) {
         if (endHour > 12) {
             endHour -= 12
             endMeridiem = 'pm'
+        } else if (endHour === 12) {
+            endMeridiem = 'pm'
         }
 
-        document.querySelector('#calendar-course-overlay .overlay-content').innerHTML = `
-            <p>
-            <a>${course.name}</a>   ${startHour}:${startMinute}${startMeridiem} - ${endHour}:${endMinute}${endMeridiem}
-            </p>
+        document.querySelector('#calendar-course-overlay .overlay-content').innerHTML += `
+            <h3>
+            ${course.name}   ${startHour}:${startMinute}${startMeridiem} - ${endHour}:${endMinute}${endMeridiem}
+            </h3>
             ${(course.instructorId === userId) ? '<p>You are the instructor of this course.</p>' : ''}
             <br><br>
         `
@@ -79,7 +82,7 @@ function openCourseOverlay(courses) {
 }
 
 function closeCourseOverlay() {
-    document.getElementById('calendar-course-overlay').style.width = '0'
+    document.getElementById('calendar-course-overlay').style.height = '0'
 }
 
 function renderCalendar() {
@@ -159,6 +162,10 @@ function renderCourseToDate(courses, row, column) {
     courseDayBtn.classList.add('btn')
     courseDayBtn.classList.add('btn-primary')
     courseDayBtn.classList.add('calendar-course-btn')
+    courseDayBtn.style.width = '1vw'
+    courseDayBtn.style.height = '1vw'
+    courseDayBtn.style.position = 'relative'
+    courseDayBtn.style.left = '1vw'
     courseDayBtn.addEventListener('click', () => openCourseOverlay(courses))
 
     document.getElementById(`r${row}-c${column}`).appendChild(courseDayBtn)

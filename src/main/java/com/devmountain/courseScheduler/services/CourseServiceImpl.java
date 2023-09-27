@@ -197,7 +197,7 @@ public class CourseServiceImpl implements CourseService {
                                     && courseDto.getStartTime().getDayOfMonth() == date.getDayOfMonth();
                         })
                         .toList());
-        filteredCourses.sort((o1, o2) -> o2.getStartTime().compareTo(o1.getStartTime()));
+        filteredCourses.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
         return filteredCourses;
     }
 
@@ -243,5 +243,27 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public Double getAvgRatingByNumber(Long number) {
+        List<Integer> ratings = new ArrayList<>();
+
+        List<Course> courses = courseRepository.findAllByNumber(number);
+        for (Course course : courses) {
+            List<Student> studentsInCourse = studentRepository.findAllByCourse(course);
+            for (Student student : studentsInCourse) {
+                if (student.getRating() != null) {
+                    ratings.add(student.getRating());
+                }
+            }
+        }
+
+        Integer totalRating = ratings.stream().reduce(0, Integer::sum);
+        if (totalRating > 0) {
+            return totalRating.doubleValue() / ratings.size();
+        } else {
+            return 0.0;
+        }
     }
 }

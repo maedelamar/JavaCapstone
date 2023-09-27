@@ -1,9 +1,8 @@
 #stats-container {
     background-color: #b5dcdd;
     width: 90vw;
-    height: 72vh;
     margin: 0 auto;
-    padding: 10vh 10vw;
+    padding: 5vh 10vw 2vh;
 }
 
 #stats-container p {
@@ -12,12 +11,13 @@
 
 #stats-size {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 #stats-notes-container {
     background-color: #b5dcdd;
     width: 90vw;
-    margin: 5vh auto;
-    padding: 10vh 10vw;
+    min-height: 50vh;
+    margin: 0 auto;
+    padding: 0 10vw;
 }

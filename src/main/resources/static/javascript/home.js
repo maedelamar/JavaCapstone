@@ -14,6 +14,7 @@ if (document.cookie) {
 let studentCounts = []
 let instructorNames = []
 let userInCourse = []
+let ratings = []
 
 function handleLogout() {
     let c = document.cookie.split(";")
@@ -136,6 +137,16 @@ async function getInstructorName(instructorId) {
     .catch(err => console.log(err))
 }
 
+async function getAvgRating(courseNumber) {
+    await fetch(`${baseURL}/courses/number/${courseNumber}/rating`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => ratings.push(data))
+    .catch(err => console.log(err))
+}
+
 function giveBtnOnclick(id, size, isInstructor, index) {
     if (isInstructor) {
         return `location.replace('./courseStats.html?course=${id}')`
@@ -179,10 +190,19 @@ async function getUpcomingCourses() {
 }
 
 async function displayUpcomingCourses(courses) {
+    if (courses.length === 0) {
+        document.getElementById('upcoming-course-section').innerHTML = `
+            <h4>There are no upcoming courses.</h4>
+        `
+
+        return
+    }
+
     document.getElementById('upcoming-course-section').innerHTML = ''
     userInCourse = []
     instructorNames = []
     studentCounts = []
+    ratings = []
 
     for (let i = 0; i < courses.length; i++) {
         const card = document.createElement('div')
@@ -192,13 +212,14 @@ async function displayUpcomingCourses(courses) {
         await getStudentCount(courses[i].id)
         await getInstructorName(courses[i].instructorId)
         await checkIfUserInCourse(courses[i].id)
+        await getAvgRating(courses[i].number)
 
         let isInstructor = (userId === courses[i].instructorId)
 
         card.innerHTML = `
             <img class="course-card-img" src="${courses[i].imageURL}">
             <p>Name: ${courses[i].name}</p>
-            <p>Size: ${courses[i].size}</p>
+            <p>Openings: ${courses[i].size - studentCounts[i]}</p>
             <p>Location: ${courses[i].location}</p>
             <p>Instructor: ${instructorNames[i]}</p>
             <p>${courses[i].description}</p>
@@ -206,6 +227,7 @@ async function displayUpcomingCourses(courses) {
             ${convertDateStringToDay(courses[i].startTime)} 
             ${convertDateStringToTime(courses[i].startTime)} - ${convertDateStringToTime(courses[i].endTime)}
             </p>
+            <p>Rating: ${ratings[i] ? `${ratings[i]}/5` : "None"}</p>
             <button class="btn btn-primary" onclick="${giveBtnOnclick(courses[i].id, courses[i].size, isInstructor, i)}">
                 ${isInstructor ? 'Stats' : (userInCourse[i] ? 'Unenroll' : 'Enroll')}
             </button>
@@ -481,8 +503,8 @@ if (userId) {
     getRandomAdminEmail()
 
     document.querySelector('footer').innerHTML = `
-        <a href="mailto:${adminEmail}" class="btn btn-link" id="become-instructor-link">Become an Instructor</a>
-        <a href="mailto:${adminEmail}" class="btn btn-link" id="become-admin-link">Become an Administrator</a>
+        <a href="mailto:${adminEmail}" class="btn btn-link footer-link" id="become-instructor-link">Become an Instructor</a>
+        <a href="mailto:${adminEmail}" class="btn btn-link footer-link" id="become-admin-link">Become an Administrator</a>
     `
 } else {
     document.querySelector('#nav-menu .overlay-content').innerHTML = `

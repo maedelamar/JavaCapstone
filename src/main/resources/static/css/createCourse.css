@@ -4,10 +4,10 @@ main {
 }
 
 #create-course-form {
-    width: 40vw;
+    width: 60vw;
     background-color: #b5dcdd;
     margin: auto;
-    padding: 5vh 18vh;
+    padding: 5vh 5vw;
 }
 
 #create-course-form > h2 {
@@ -17,4 +17,16 @@ main {
 
 .form-group {
     margin-bottom: 3vh;
+}
+
+#course-name-input {
+    width: 50%;
+}
+
+textarea {
+    width: 97.5%;
+}
+
+#course-location-input {
+    width: 50%;
 }

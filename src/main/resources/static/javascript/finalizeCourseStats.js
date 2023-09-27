@@ -13,7 +13,10 @@ if (document.cookie) {
 const urlQuery = document.URL.split("?")[1]
 const courseId = +urlQuery.split("=")[1]
 
+let instructorName
+
 checkIfUserIsInstructor()
+getInstructorName()
 
 async function checkIfUserIsInstructor() {
     await fetch(`${baseURL}/courses/${courseId}`, {
@@ -26,6 +29,16 @@ async function checkIfUserIsInstructor() {
             location.replace('./home.html')
         }
     })
+    .catch(err => console.log(err))
+}
+
+async function getInstructorName() {
+    await fetch(`${baseURL}/users/${userId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => instructorName = `${data.firstName} ${data.lastName}`)
     .catch(err => console.log(err))
 }
 
@@ -43,16 +56,6 @@ function openNav() {
 
 function closeNav() {
     document.getElementById('nav-menu').style.width = '0'
-}
-
-async function getInstructorFromId(instructorId) {
-    await fetch(`${baseURL}/users/${instructorId}`, {
-        method: "GET",
-        headers
-    })
-    .then(res => res.json())
-    .then(data => instructor = data)
-    .catch(err => console.log(err))
 }
 
 function getFormattedTime(time) {
@@ -99,13 +102,12 @@ async function getCourseFromId() {
     .catch(err => console.log(err))
 }
 
-function renderStats(course) {
-    getInstructorFromId(course.instructorId)
-    countStudents(courseId)
-    countAttended(courseId)
+async function renderStats(course) {
+    await countStudents(courseId)
+    await countAttended(courseId)
 
     document.getElementById('stats-course-name').textContent = course.name
-    document.getElementById('stats-course-instructor').textContent = `${instructor.firstName} ${instructor.lastName}`
+    document.getElementById('stats-course-instructor').textContent = `${instructorName}`
     document.getElementById('stats-place-and-time').textContent = `Location: ${course.location}     ${getFormattedTime(new Date(course.startTime))} - ${getFormattedTime(new Date(course.endTime))}`
     document.getElementById('stats-description').textContent = course.description
     
@@ -134,7 +136,7 @@ async function handleSubmit(e) {
     .catch(err => console.log(err))
 
     if (response.status === 200) {
-        location.replace('./courseStats.html')
+        location.replace(`./courseStats.html?course=${courseId}`)
     }
 }
 
@@ -160,4 +162,5 @@ if (userId) {
 
 getCourseFromId()
 
+document.getElementById('cancel-btn').addEventListener('click', () => location.replace(`./courseStats.html?course=${courseId}`))
 document.getElementById('notes-form').addEventListener('submit', handleSubmit)

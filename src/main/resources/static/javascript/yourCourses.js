@@ -141,6 +141,14 @@ function getCoursesWhereUserIsStudent(students) {
 }
 
 async function displayYourCourses(courses) {
+    if (courses.length === 0) {
+        document.getElementById('your-course-section').innerHTML = `
+            <h4>You have no upcoming courses.</h4>
+        `
+
+        return
+    }
+
     document.getElementById('your-course-section').innerHTML = ''
     userInCourse = []
     instructorNames = []
@@ -153,14 +161,13 @@ async function displayYourCourses(courses) {
 
         await getStudentCount(courses[i].id)
         await getInstructorName(courses[i].instructorId)
-        await checkIfUserInCourse(courses[i].id)
 
         let isInstructor = (userId === courses[i].instructorId)
 
         card.innerHTML = `
             <img class="course-card-img" src="${courses[i].imageURL}">
             <p>Name: ${courses[i].name}</p>
-            <p>Size: ${courses[i].size}</p>
+            <p>Openings: ${courses[i].size - studentCounts[i]}</p>
             <p>Location: ${courses[i].location}</p>
             <p>Instructor: ${instructorNames[i]}</p>
             <p>${courses[i].description}</p>

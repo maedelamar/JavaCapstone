@@ -34,4 +34,6 @@ public interface CourseService {
     List<CourseDto> getPastCourses(Long userId);
 
     Optional<CourseDto> getLatestCourseSharingNumber(Long number);
+
+    Double getAvgRatingByNumber(Long number);
 }

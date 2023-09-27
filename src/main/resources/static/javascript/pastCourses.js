@@ -10,7 +10,8 @@ if (document.cookie) {
     permission = +cookieArr[1].split("=")[1]
 }
 
-let instructorName = ''
+let instructorNames = []
+let studentIds = []
 
 function handleLogout() {
     let c = document.cookie.split(";")
@@ -51,7 +52,36 @@ async function getInstructorName(instructorId) {
         headers
     })
     .then(res => res.json())
-    .then(data => instructorName = `${data.firstName} ${data.lastName}`)
+    .then(data => instructorNames.push(`${data.firstName} ${data.lastName}`))
+    .catch(err => console.log(err))
+}
+
+async function getUsersStudentId(courseId) {
+    await fetch(`${baseURL}/students/user/${userId}/course/${courseId}`, {
+        method: "GET",
+        headers
+    })
+    .then(res => res.json())
+    .then(data => studentIds.push(data.id))
+    .catch(err => console.log(err))
+}
+
+async function rateCourse(studentId, rating) {
+    const bodyObj = {
+        id: studentId,
+        rating
+    }
+
+    const response = await fetch(`${baseURL}/students`, {
+        method: "PUT",
+        body: JSON.stringify(bodyObj),
+        headers
+    })
+    .catch(err => console.log(err))
+
+    if (response.status === 200) {
+        alert(`You rated this course ${rating}/5.`)
+    }
 }
 
 async function getPastCourses() {
@@ -64,33 +94,43 @@ async function getPastCourses() {
     .catch(err => console.log(err))
 }
 
-function displayPastCourses(courses) {
-    for (const course of courses) {
+async function displayPastCourses(courses) {
+    if (courses.length === 0) {
+        document.getElementById('past-course-section').innerHTML = `
+            <h4>You have not taken or instructed any courses.</h4>
+        `
+
+        return
+    }
+
+    instructorNames = []
+    studentIds = []
+    
+    for (let i = 0; i < courses.length; i++) {
         const card = document.createElement('div')
         card.classList.add('container')
         card.classList.add('course-container')
 
-        let isInstructor = (userId === course.instructorId)
+        let isInstructor = (userId === courses[i].instructorId)
 
-        getInstructorName(course.instructorId)
+        await getInstructorName(courses[i].instructorId)
+        await getUsersStudentId(courses[i].id)
 
         card.innerHTML = `
-            <img class="course-card-img" src="${course.imageURL}">
-            <p>Name: ${course.name}</p>
-            <p>Size: ${course.size}</p>
-            <p>Location: ${course.location}</p>
-            <p>Instructor: ${instructorName}</p>
-            <p>${course.description}</p>
+            <img class="course-card-img" src="${courses[i].imageURL}">
+            <p>Name: ${courses[i].name}</p>
+            <p>Size: ${courses[i].size}</p>
+            <p>Location: ${courses[i].location}</p>
+            <p>Instructor: ${instructorNames[i]}</p>
+            <p>${courses[i].description}</p>
             <p>
-            ${convertDateStringToDay(course.startTime)} 
-            ${convertDateStringToTime(course.startTime)} - ${convertDateStringToTime(course.endTime)}
+            ${convertDateStringToDay(courses[i].startTime)} 
+            ${convertDateStringToTime(courses[i].startTime)} - ${convertDateStringToTime(courses[i].endTime)}
             </p>
-            <button class="btn btn-primary" onclick="${isInstructor ? "location.replace('./courseStats.html?course=" + course.id + "')" : ''}">
-                ${isInstructor ? 'Stats' : 'Rate'}
-            </button>
+            ${!isInstructor ? `<select id="rate-select-${studentIds[i]}"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><button class="btn btn-primary" onclick="rateCourse(${studentIds[i]}, document.getElementById('rate-select-${studentIds[i]}').value)">Rate</button></p>`: `<button class="btn btn-primary" onclick="location.replace('./courseStats.html?course=${courses[i].id}')">Stats</button>`}
         `
 
-        document.getElementById('your-course-section').appendChild(card)
+        document.getElementById('past-course-section').appendChild(card)
     }
 }
 

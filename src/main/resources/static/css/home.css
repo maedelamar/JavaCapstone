@@ -8,6 +8,15 @@ main > h3 {
     color: #2c6b96;
 }
 
+footer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer-link {
+    font-size: 14pt;
+}
+
 .top-overlay {
     height: 0;
     width: 100vw;
