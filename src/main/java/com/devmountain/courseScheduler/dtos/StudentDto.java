@@ -15,7 +15,7 @@ public class StudentDto implements Serializable {
     private Long id;
     private Boolean attended;
     private Integer rating;
-    private Course course;
+    private Course course; //We need the course
 
     public StudentDto(Student student) {
         if (student.getId() != null) {

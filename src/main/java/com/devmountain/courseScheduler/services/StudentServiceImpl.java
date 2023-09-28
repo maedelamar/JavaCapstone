@@ -33,6 +33,7 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private WaiterRepository waiterRepository;
 
+    //Add a student to a course
     @Override
     @Transactional
     public List<String> addStudent(StudentDto studentDto, Long userId, Long courseId) {
@@ -50,6 +51,7 @@ public class StudentServiceImpl implements StudentService {
         return response;
     }
 
+    //Add a student to a course from the waiting list
     @Override
     @Transactional
     public void addFromWaitingList() {
@@ -79,6 +81,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    //Update a student's attendance or rating
     @Override
     @Transactional
     public List<String> updateStudent(StudentDto studentDto) {
@@ -98,6 +101,7 @@ public class StudentServiceImpl implements StudentService {
         return response;
     }
 
+    //Delete a student from a course
     @Override
     @Transactional
     public List<String> deleteStudentById(Long studentId) {
@@ -108,12 +112,14 @@ public class StudentServiceImpl implements StudentService {
         return response;
     }
 
+    //Get a list of all students
     @Override
     public List<StudentDto> getAllStudents() {
         List<Student> students = studentRepository.findAll();
         return students.stream().map(student -> new StudentDto(student)).collect(Collectors.toList());
     }
 
+    //Get a list of students by their user id
     @Override
     public List<StudentDto> getStudentsByUserId(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -126,6 +132,7 @@ public class StudentServiceImpl implements StudentService {
         return Collections.emptyList();
     }
 
+    //Get all students in a given course
     @Override
     public List<StudentDto> getStudentsByCourseId(Long courseId) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);
@@ -139,6 +146,7 @@ public class StudentServiceImpl implements StudentService {
         return Collections.emptyList();
     }
 
+    //Get a student by their student id
     @Override
     public Optional<StudentDto> getStudentById(Long studentId) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
@@ -150,6 +158,7 @@ public class StudentServiceImpl implements StudentService {
         return Optional.empty();
     }
 
+    //Get the number of students in a course
     @Override
     public Long getCountCourse(Long courseId) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);
@@ -161,6 +170,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    //Get the number of students who attended a course
     @Override
     public Long getCountAttended(Long courseId) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);
@@ -172,6 +182,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    //Get a student from their unique combination of user and course
     @Override
     public Optional<StudentDto> getStudentFromUserAndCourse(Long userId, Long courseId) {
         Optional<User> userOptional = userRepository.findById(userId);

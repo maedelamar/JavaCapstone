@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface WaiterRepository extends JpaRepository<Waiter, Long> {
-    List<Waiter> findAllByUser(User user);
+    List<Waiter> findAllByUser(User user); //find all waiters by user
 
-    List<Waiter> findAllByCourse(Course course);
+    List<Waiter> findAllByCourse(Course course); //get the waiting list for a course
 
-    Optional<Waiter> findTopByCourse(Course course);
+    Optional<Waiter> findTopByCourse(Course course); //find first waiter in a course's waiting list
 }

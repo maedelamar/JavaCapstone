@@ -12,15 +12,15 @@ import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    List<Course> findAllByInstructor(User instructor);
+    List<Course> findAllByInstructor(User instructor); //get all courses where user is the instructor
 
-    List<Course> findAllByNameContainsIgnoreCaseOrderByStartTime(String search);
+    List<Course> findAllByNameContainsIgnoreCaseOrderByStartTime(String search); //get search results
 
-    List<Course> findAllByNumber(Long number);
+    List<Course> findAllByNumber(Long number); //find all courses with a given number
 
-    Optional<Course> findTopByOrderByNumberDesc();
+    Optional<Course> findTopByOrderByNumberDesc(); //find highest number
 
-    List<Course> findAllByStartTimeGreaterThanOrderByStartTime(LocalDateTime time);
+    List<Course> findAllByStartTimeGreaterThanOrderByStartTime(LocalDateTime time); //find upcoming courses
 
-    Optional<Course> findTopByNumberOrderByStartTimeDesc(Long number);
+    Optional<Course> findTopByNumberOrderByStartTimeDesc(Long number); //find latest course by number
 }

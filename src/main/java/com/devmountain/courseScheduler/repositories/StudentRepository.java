@@ -12,13 +12,13 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    List<Student> findAllByUser(User user);
+    List<Student> findAllByUser(User user); //find student list of a user
 
-    List<Student> findAllByCourse(Course course);
+    List<Student> findAllByCourse(Course course); //find all students in a course
 
-    Long countByCourse(Course course);
+    Long countByCourse(Course course); //count the number of students in a course
 
-    Long countByCourseAndAttended(Course course, boolean attended);
+    Long countByCourseAndAttended(Course course, boolean attended); // count the number of students who attended a course
 
-    Optional<Student> findByUserAndCourse(User user, Course course);
+    Optional<Student> findByUserAndCourse(User user, Course course); //find student by user and course
 }

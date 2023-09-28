@@ -85,9 +85,21 @@ function calculateEndTime(startTime, duration) {
 
 function addWeek(datetime, numberOfWeeks) {
     let newDate = new Date(datetime)
-    newDate.setDate(newDate.getDate() + (numberOfWeeks * 7))
+    let year = newDate.getFullYear()
+    let month = newDate.getMonth() + 1
+    let date = newDate.getDate()
 
-    return `${newDate.getFullYear()}-${String(newDate.getMonth()).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')}T${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}`
+    date += numberOfWeeks * 7
+    if (date > new Date(year, month, 0).getDate()) {
+        date -= new Date(year, month, 0).getDate()
+        month += 1
+        if (month > 12) {
+            month -= 12
+            year++
+        }
+    }
+
+    return `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}T${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}`
 }
 
 function handleWeeklyOption(willShow) {
@@ -156,8 +168,8 @@ async function handleCourseCreation(e) {
     }
 
     let imageURL;
-    if (imageInput.files[0]) {
-        imageURL = imageInput.files[0].name
+    if (imageInput.value) {
+        imageURL = imageInput.value
     } else {
         imageURL = 'https://images.pond5.com/male-tutor-teaching-university-students-footage-040447646_iconl.jpeg'
     }

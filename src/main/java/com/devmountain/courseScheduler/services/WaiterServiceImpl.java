@@ -28,6 +28,7 @@ public class WaiterServiceImpl implements WaiterService {
     @Autowired
     private CourseRepository courseRepository;
 
+    //Add a user to a course's waiting list
     @Override
     @Transactional
     public List<String> addWaiter(WaiterDto waiterDto, Long userId, Long courseId) {
@@ -45,6 +46,7 @@ public class WaiterServiceImpl implements WaiterService {
         return response;
     }
 
+    //Remove a user from a course's waiting list
     @Override
     @Transactional
     public List<String> deleteWaiterById(Long waiterId) {
@@ -55,12 +57,14 @@ public class WaiterServiceImpl implements WaiterService {
         return response;
     }
 
+    //Get the every user in the waiting list
     @Override
     public List<WaiterDto> getAllWaiters() {
         List<Waiter> waiters = waiterRepository.findAll();
         return waiters.stream().map(waiter -> new WaiterDto(waiter)).collect(Collectors.toList());
     }
 
+    //Get all instances of the user in the waiting list
     @Override
     public List<WaiterDto> getWaitersByUser(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -73,6 +77,7 @@ public class WaiterServiceImpl implements WaiterService {
         return Collections.emptyList();
     }
 
+    //Get a course's waiting list
     @Override
     public List<WaiterDto> getWaitersByCourse(Long courseId) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);
@@ -85,6 +90,7 @@ public class WaiterServiceImpl implements WaiterService {
         return Collections.emptyList();
     }
 
+    //Get a spot in the waiting list by waiter id
     @Override
     public Optional<WaiterDto> getWaiterById(Long waiterId) {
         Optional<Waiter> waiterOptional = waiterRepository.findById(waiterId);

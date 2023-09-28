@@ -23,7 +23,7 @@ public class CourseDto implements Serializable {
     private LocalDateTime endTime;
     private String location;
     private String notes;
-    private Long instructorId;
+    private Long instructorId; //We need to pass the instructor's id
 
     public CourseDto(Course course) {
         if (course.getId() != null) {

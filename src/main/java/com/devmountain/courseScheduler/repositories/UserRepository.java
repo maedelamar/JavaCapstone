@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email); //find user by unique email
 
-    List<User> findAllByPermissionGreaterThanEqual(Integer permission);
+    List<User> findAllByPermissionGreaterThanEqual(Integer permission); //find all users with permission higher than a given number
 }

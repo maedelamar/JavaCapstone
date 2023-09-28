@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //Add a new user
     @Override
     @Transactional
     public List<String> addUser(UserDto userDto) {
@@ -52,13 +53,14 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    //Log in to the application
     @Override
     public List<String> login(UserDto userDto) {
         List<String> response = new ArrayList<>();
         Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
 
         if (userOptional.isPresent()) {
-            if (passwordEncoder.matches(userDto.getPassword(), userOptional.get().getPassword())) {
+            if (passwordEncoder.matches(userDto.getPassword(), userOptional.get().getPassword())) { //make sure info matches
                 response.add("User Login Successful");
                 response.add(String.valueOf(userOptional.get().getId()));
                 response.add(String.valueOf(userOptional.get().getPermission()));
@@ -72,6 +74,7 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    //Update a user
     @Override
     @Transactional
     public List<String> updateUser(UserDto userDto) {
@@ -100,6 +103,7 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    //Delete a user
     @Override
     @Transactional
     public List<String> deleteUserById(Long userId) {
@@ -118,12 +122,14 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    //Get all users
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(user -> new UserDto(user)).collect(Collectors.toList());
     }
 
+    //Get a user by their id
     @Override
     public Optional<UserDto> getUserById(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -135,6 +141,7 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
+    //Get a student's user id
     @Override
     public Optional<UserDto> getUserByStudentId(Long studentId) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
@@ -150,12 +157,14 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
+    //Get all users with permission >= 2
     @Override
     public List<UserDto> getAdmins() {
         List<User> users = userRepository.findAllByPermissionGreaterThanEqual(2);
         return users.stream().map(user -> new UserDto(user)).toList();
     }
 
+    //Get a user by their unique email
     @Override
     public Optional<UserDto> getUserByEmail(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);

@@ -5,17 +5,20 @@ let userId = 0
 let permission = -1
 let adminEmail
 
+//Get user's id and permission
 if (document.cookie) {
     const cookieArr = document.cookie.split(";")
     userId = +cookieArr[0].split("=")[1]
     permission = +cookieArr[1].split("=")[1]
 }
 
+//Initialize card info
 let studentCounts = []
 let instructorNames = []
 let userInCourse = []
 let ratings = []
 
+//Log out, detroy cookies, and return to home
 function handleLogout() {
     let c = document.cookie.split(";")
     for (let i in c) {
@@ -24,14 +27,17 @@ function handleLogout() {
     location.replace("/");
 }
 
+//Open menu
 function openNav() {
     document.getElementById('nav-menu').style.width = '40vw'
 }
 
+//Close menu
 function closeNav() {
     document.getElementById('nav-menu').style.width = '0'
 }
 
+//Administrator tools
 function openAddInstructor() {
     if (permission < 2) {
         return
@@ -87,12 +93,15 @@ function openAddAdmin() {
 function closeAddAdmin() {
     document.getElementById('add-admin-overlay').style.height = '0'
 }
+//End admin tools
 
+//Convert Datetime to formatted date
 function convertDateStringToDay(dateString) {
     let dateSringAsDate = new Date(dateString)
     return (dateSringAsDate.getMonth() + 1) + '/' + dateSringAsDate.getDate() + '/' + dateSringAsDate.getFullYear()
 }
 
+//Get time from datetime
 function convertDateStringToTime(dateString) {
     const dateSringAsDate = new Date(dateString)
     let hour = dateSringAsDate.getHours()
@@ -107,6 +116,7 @@ function convertDateStringToTime(dateString) {
     return hour + ':' + String(dateSringAsDate.getMinutes()).padStart(2, '0') + meridiem
 }
 
+//Check if user is the the course
 async function checkIfUserInCourse(courseId) {
     await fetch(`${baseURL}/students/user/${userId}/course/${courseId}`, {
         method: "GET",
@@ -117,6 +127,7 @@ async function checkIfUserInCourse(courseId) {
     .catch(err => console.log(err))
 }
 
+//Get the number of students in a course
 async function getStudentCount(courseId) {
     await fetch(`${baseURL}/students/course/${courseId}/count`, {
         method: "GET",
@@ -127,6 +138,7 @@ async function getStudentCount(courseId) {
     .catch(err => console.log(err))
 }
 
+//Get the name of the instructor of a course
 async function getInstructorName(instructorId) {
     await fetch(`${baseURL}/users/${instructorId}`, {
         method: "GET",
@@ -137,6 +149,7 @@ async function getInstructorName(instructorId) {
     .catch(err => console.log(err))
 }
 
+//Get a course's rating
 async function getAvgRating(courseNumber) {
     await fetch(`${baseURL}/courses/number/${courseNumber}/rating`, {
         method: "GET",
@@ -147,6 +160,7 @@ async function getAvgRating(courseNumber) {
     .catch(err => console.log(err))
 }
 
+//Change button's functionality
 function giveBtnOnclick(id, size, isInstructor, index) {
     if (isInstructor) {
         return `location.replace('/stats?course=${id}')`
@@ -161,6 +175,7 @@ function giveBtnOnclick(id, size, isInstructor, index) {
     }
 }
 
+//Delete a course
 async function deleteCourse(id) {
     const willDelete = confirm('Do you want to delete this course?')
     if (!willDelete) {
@@ -179,6 +194,7 @@ async function deleteCourse(id) {
     }
 }
 
+//Get all upcoming courses
 async function getUpcomingCourses() {
     await fetch(`${baseURL}/courses/sorted/upcoming`, {
         method: "GET",
@@ -189,6 +205,7 @@ async function getUpcomingCourses() {
     .catch(err => console.log(err))
 }
 
+//Display upcoming courses
 async function displayUpcomingCourses(courses) {
     if (courses.length === 0) {
         document.getElementById('upcoming-course-section').innerHTML = `
@@ -238,6 +255,7 @@ async function displayUpcomingCourses(courses) {
     }
 }
 
+//Enroll in a course
 async function enroll(courseId) {
     if (!userId) {
         location.replace('/login')
@@ -262,6 +280,7 @@ async function enroll(courseId) {
     }
 }
 
+//Unenroll from a given course
 async function unenroll(courseId) {
     if (!userId) {
         location.replace('/login')
@@ -292,6 +311,7 @@ async function unenroll(courseId) {
     .catch(err => console.log(err))
 }
 
+//Enter a course's waiting list if it is full
 async function enterWaitingList(courseId) {
     if (!userId) {
         location.replace('/login')
@@ -315,6 +335,7 @@ async function enterWaitingList(courseId) {
     }
 }
 
+//Getthe email of a random admin
 async function getRandomAdminEmail() {
     await fetch(`${baseURL}/users/permission/admins`, {
         method: "GET",
@@ -328,6 +349,7 @@ async function getRandomAdminEmail() {
     .catch(err => console.log(err))
 }
 
+//Add an instructor
 async function handleAddInstructor(e) {
     e.preventDefault()
 
@@ -368,6 +390,7 @@ async function handleAddInstructor(e) {
     .catch(err => console.log(err))
 }
 
+//Remove a user's privileges
 async function handleRemovePrivilege(e) {
     e.preventDefault()
 
@@ -408,6 +431,7 @@ async function handleRemovePrivilege(e) {
     .catch(err => console.log(err))
 }
 
+//Add a new admin
 async function handleAddAdmin(e) {
     e.preventDefault()
 
@@ -443,6 +467,7 @@ async function handleAddAdmin(e) {
     .catch(err => console.log(err))
 }
 
+//Delete a user
 async function handleRemoveUser(e) {
     e.preventDefault()
 
@@ -472,6 +497,7 @@ async function handleRemoveUser(e) {
     .catch(err => console.log(err))
 }
 
+//Set menu options
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
@@ -500,6 +526,7 @@ if (userId) {
         `
     }
 
+    //set footer
     getRandomAdminEmail()
 
     document.querySelector('footer').innerHTML = `
