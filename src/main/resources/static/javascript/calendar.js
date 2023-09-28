@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8080/api/v1'
+const baseURL = 'http://3.139.73.71:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
 let userId = 0
@@ -22,7 +22,7 @@ function handleLogout() {
     for (let i in c) {
         document.cookie = /^[^=]+/.exec(c[i])[0]+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
     }
-    location.replace("./home.html");
+    location.replace("/");
 }
 
 function openNav() {
@@ -174,19 +174,19 @@ function renderCourseToDate(courses, row, column) {
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href="./createCourse.html>Create Course</a>
+            <a href="/create">Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</a>
-        <a href="./pastCourses.html">Past Courses</a>
+        <a href="/your">Your Courses</a>
+        <a href="/past">Past Courses</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {
     document.querySelector('#nav-menu .overlay-content').innerHTML = `
-        <a href="./login.html">Login</a>
-        <a href="./register.html">Register</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
     `
 }
 

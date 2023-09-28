@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8080/api/v1'
+const baseURL = 'http://3.139.73.71:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
 let userId = 0
@@ -18,7 +18,7 @@ function handleLogout() {
     for (let i in c) {
         document.cookie = /^[^=]+/.exec(c[i])[0]+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
     }
-    location.replace('./home.html');
+    location.replace('/');
 }
 
 function openNav() {
@@ -127,7 +127,7 @@ async function displayPastCourses(courses) {
             ${convertDateStringToDay(courses[i].startTime)} 
             ${convertDateStringToTime(courses[i].startTime)} - ${convertDateStringToTime(courses[i].endTime)}
             </p>
-            ${!isInstructor ? `<select id="rate-select-${studentIds[i]}"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><button class="btn btn-primary" onclick="rateCourse(${studentIds[i]}, document.getElementById('rate-select-${studentIds[i]}').value)">Rate</button></p>`: `<button class="btn btn-primary" onclick="location.replace('./courseStats.html?course=${courses[i].id}')">Stats</button>`}
+            ${!isInstructor ? `<select id="rate-select-${studentIds[i]}"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><button class="btn btn-primary" onclick="rateCourse(${studentIds[i]}, document.getElementById('rate-select-${studentIds[i]}').value)">Rate</button></p>`: `<button class="btn btn-primary" onclick="location.replace('/stats?course=${courses[i].id}')">Stats</button>`}
         `
 
         document.getElementById('past-course-section').appendChild(card)
@@ -137,19 +137,19 @@ async function displayPastCourses(courses) {
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href="./createCourse.html>Create Course</a>
+            <a href="/create">Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</a>
-        <a href="./calendar.html">Calendar</a>
+        <a href="/your">Your Courses</a>
+        <a href="/calendar">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {
     document.querySelector('#nav-menu .overlay-content').innerHTML = `
-        <a href="./login.html">Login</a>
-        <a href="./register.html">Register</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
     `
 }
 

@@ -2,7 +2,7 @@ const registerForm = document.getElementById("register-form")
 const toLoginBtn = document.getElementById('to-login-btn')
 
 const headers = {"Content-Type":"application/json"}
-const baseURL = 'http://localhost:8080/api/v1/users'
+const baseURL = 'http://3.139.73.71:8080/api/v1/users'
 
 document.getElementById('register-error-text').textContent = ''
 
@@ -80,7 +80,7 @@ async function handleRegister(e) {
             }
         }
 
-        location.replace('./login.html')
+        location.replace('/login')
     } else {
         document.getElementById('register-email-input').style.borderColor = "red"
         document.getElementById('register-error-text').textContent = 'Email is already in use.'
@@ -88,4 +88,4 @@ async function handleRegister(e) {
 }
 
 registerForm.addEventListener('submit', handleRegister)
-toLoginBtn.addEventListener('click', () => location.replace('./login.html'))
+toLoginBtn.addEventListener('click', () => location.replace('/login'))

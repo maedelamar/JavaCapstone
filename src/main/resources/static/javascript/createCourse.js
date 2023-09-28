@@ -1,11 +1,11 @@
-const baseURL = 'http://localhost:8080/api/v1/courses'
+const baseURL = 'http://3.139.73.71:8080/api/v1/courses'
 const headers = {"Content-Type":"application/json"}
 
 const cookies = document.cookie.split(";")
 const userId = +cookies[0].split("=")[1]
 
 if (userId < 1) {
-    location.replace('./home.html')
+    location.replace('/')
 }
 
 const createCourseForm = document.getElementById('create-course-form')
@@ -186,7 +186,7 @@ async function handleCourseCreation(e) {
             }
         }
 
-        location.replace("./home.html")
+        location.replace("/")
     }
 }
 

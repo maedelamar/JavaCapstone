@@ -2,7 +2,7 @@ const loginForm = document.getElementById('login-form')
 const toRegisterBtn = document.getElementById('to-register-btn')
 
 const headers = {"Content-Type":"application/json"}
-const baseURL = 'http://localhost:8080/api/v1/users'
+const baseURL = 'http://3.139.73.71:8080/api/v1/users'
 
 document.getElementById('login-error-text').textContent = ''
 
@@ -61,7 +61,7 @@ async function handleLogin(e) {
         if (responseArr[1]) {
             document.cookie = `userId=${responseArr[1]}`
             document.cookie = `permission=${responseArr[2]}`
-            location.replace('./home.html')
+            location.replace('/')
         } else {
             document.getElementById('login-email-input').style.borderColor = 'red'
             document.getElementById('login-password-input').style.borderColor = 'red'
@@ -73,4 +73,4 @@ async function handleLogin(e) {
 }
 
 loginForm.addEventListener('submit', handleLogin)
-toRegisterBtn.addEventListener('click', () => location.replace('./register.html'))
+toRegisterBtn.addEventListener('click', () => location.replace('/register'))

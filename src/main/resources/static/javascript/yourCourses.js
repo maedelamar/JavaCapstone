@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8080/api/v1'
+const baseURL = 'http://3.139.73.71:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
 let userId = 0
@@ -81,7 +81,7 @@ async function getInstructorName(instructorId) {
 
 function giveBtnOnclick(id, size, isInstructor, index) {
     if (isInstructor) {
-        return `location.replace('./courseStats.html?course=${id}')`
+        return `location.replace('/stats?course=${id}')`
     } else if (userInCourse[index]) {
         return `unenroll(${id})`
     } else if (studentCounts[index] < size) {
@@ -223,7 +223,7 @@ async function enterWaitingList(courseId) {
 
 async function enroll(courseId) {
     if (!userId) {
-        location.replace('./login.html')
+        location.replace('/login')
         return
     }
 
@@ -247,7 +247,7 @@ async function enroll(courseId) {
 
 async function unenroll(courseId) {
     if (!userId) {
-        location.replace('./login.html')
+        location.replace('/login')
         return
     }
 
@@ -279,7 +279,7 @@ async function unenroll(courseId) {
 
 async function enterWaitingList(courseId) {
     if (!userId) {
-        location.replace('./login.html')
+        location.replace('/login')
         return
     }
 
@@ -303,19 +303,19 @@ async function enterWaitingList(courseId) {
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href="./createCourse.html>Create Course</a>
+            <a href="/create">Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./pastCourses.html">Past Courses</a>
-        <a href="./calendar.html">Calendar</a>
+        <a href="/past">Past Courses</a>
+        <a href="/calendar">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {
     document.querySelector('#nav-menu .overlay-content').innerHTML = `
-        <a href="./login.html">Login</a>
-        <a href="./register.html">Register</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
     `
 }
 

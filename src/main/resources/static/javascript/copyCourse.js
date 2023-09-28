@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8080/api/v1/courses'
+const baseURL = 'http://3.139.73.71:8080/api/v1/courses'
 const headers = {"Content-Type":"application/json"}
 
 const cookies = document.cookie.split(";")
@@ -28,7 +28,7 @@ async function checkIfUserIsInstructor() {
     .then(res => res.json())
     .then(data => {
         if (userId !== data.instructorId) {
-            location.replace('./home.html')
+            location.replace('/')
         }
     })
     .catch(err => console.log(err))
@@ -208,7 +208,7 @@ async function handleCourseCreation(e) {
             }
         }
 
-        location.replace("./home.html")
+        location.replace("/")
     } else {
         alert(`Error in creating course: ${response.status}`)
 

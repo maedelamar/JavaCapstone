@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8080/api/v1'
+const baseURL = 'http://3.139.73.71:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
 let userId = 0
@@ -23,7 +23,7 @@ async function checkIfUserIsInstructor() {
     .then(res => res.json())
     .then(data => {
         if (userId !== data.instructorId) {
-            location.replace('./home.html')
+            location.replace('/')
         }
     })
     .catch(err => console.log(err))
@@ -38,7 +38,7 @@ function handleLogout() {
     for (let i in c) {
         document.cookie = /^[^=]+/.exec(c[i])[0]+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
     }
-    location.replace("./home.html");
+    location.replace("/");
 }
 
 function openNav() {
@@ -121,13 +121,13 @@ async function renderStats(course) {
         const toAttendanceBtn = document.createElement('button')
         toAttendanceBtn.classList.add('btn', 'btn-primary')
         toAttendanceBtn.textContent = 'Edit Attendance'
-        toAttendanceBtn.addEventListener('click', () => location.replace(`./attendance.html?course=${courseId}`))
+        toAttendanceBtn.addEventListener('click', () => location.replace(`/attendance?course=${courseId}`))
 
         document.getElementById('stats-container').appendChild(toAttendanceBtn)
     }
 
-    document.getElementById('copy-course-btn').addEventListener('click', () => location.replace(`./copyCourse.html?course=${course.id}&number=${course.number}`))
-
+    document.getElementById('copy-course-btn').addEventListener('click', () => location.replace(`/copy?course=${course.id}&number=${course.number}`))
+    
     if (course.notes) {
         document.getElementById('stats-notes-content-container').innerHTML = `
             <p>Notes:</p>
@@ -141,23 +141,23 @@ async function renderStats(course) {
 if (userId) {
     if (permission > 0) {
         document.querySelector('#nav-menu .overlay-content').innerHTML = `
-            <a href="./createCourse.html>Create Course</a>
+            <a href="/create">Create Course</a>
         `
     }
 
     document.querySelector('#nav-menu .overlay-content').innerHTML += `
-        <a href="./yourCourses.html">Your Courses</a>
-        <a href="./pastCourses.html">Past Courses</a>
-        <a href="./calendar.html">Calendar</a>
+        <a href="/your">Your Courses</a>
+        <a href="/past">Past Courses</a>
+        <a href="/calendar">Calendar</a>
         <a href="#" onclick="handleLogout()">Log Out</a>
     `
 } else {
     document.querySelector('#nav-menu .overlay-content').innerHTML = `
-        <a href="./login.html">Login</a>
-        <a href="./register.html">Register</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
     `
 }
 
 getCourseFromId()
 
-document.getElementById('edit-notes-btn').addEventListener('click', () => location.replace(`./finalizeCourseStats.html?course=${courseId}`))
+document.getElementById('edit-notes-btn').addEventListener('click', () => location.replace(`/notes?course=${courseId}`))
