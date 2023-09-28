@@ -1,6 +1,19 @@
 const baseURL = 'http://3.139.73.71:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
+//Make sure user is in Chrome
+if (!navigator.userAgent.includes('Chrome')) {
+    document.querySelector('header').innerHTML = `
+        <h1>TrainUp</h1>
+    `
+
+    document.querySelector('main').innerHTML = `
+        <h3>This application is designed for Google Chrome. Using other browsers may cause errors.</h3>
+    `
+
+    throw Error("This application is designed for Google Chrome.")
+}
+
 let userId = 0
 let permission = -1
 let adminEmail
