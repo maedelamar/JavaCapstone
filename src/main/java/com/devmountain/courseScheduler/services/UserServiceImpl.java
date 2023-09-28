@@ -31,13 +31,7 @@ public class UserServiceImpl implements UserService {
     private StudentRepository studentRepository;
 
     @Autowired
-    private StudentService studentService;
-
-    @Autowired
     private WaiterRepository waiterRepository;
-
-    @Autowired
-    private WaiterService waiterService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
