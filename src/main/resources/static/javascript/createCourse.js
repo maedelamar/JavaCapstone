@@ -185,7 +185,7 @@ async function handleCourseCreation(e) {
                     imageURL: bodyObj.imageURL,
                     size: bodyObj.size,
                     startTime: newStartTime,
-                    endTime: calculateEndTime(newStartTime, bodyObj.duration),
+                    endTime: calculateEndTime(newStartTime, durationInput.value),
                     location: bodyObj.location
                 }
 
