@@ -1,4 +1,4 @@
-const baseURL = 'http://3.139.73.71:8080/api/v1/courses'
+const baseURL = 'http://18.223.122.66:8080/api/v1/courses'
 const headers = {"Content-Type":"application/json"}
 
 const cookies = document.cookie.split(";")

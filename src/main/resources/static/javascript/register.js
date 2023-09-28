@@ -2,7 +2,7 @@ const registerForm = document.getElementById("register-form")
 const toLoginBtn = document.getElementById('to-login-btn')
 
 const headers = {"Content-Type":"application/json"}
-const baseURL = 'http://3.139.73.71:8080/api/v1/users'
+const baseURL = 'http://18.223.122.66:8080/api/v1/users'
 
 document.getElementById('register-error-text').textContent = ''
 

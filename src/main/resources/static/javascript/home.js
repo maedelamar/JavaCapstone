@@ -1,4 +1,4 @@
-const baseURL = 'http://3.139.73.71:8080/api/v1'
+const baseURL = 'http://18.223.122.66:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
 //Make sure user is in Chrome
