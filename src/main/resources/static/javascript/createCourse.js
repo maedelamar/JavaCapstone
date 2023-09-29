@@ -280,6 +280,8 @@ async function handleCourseCreation(e) {
 
                     for (let j = 1; j < numberOfWeeks; j++) {
                         const newWeekStartTime = addWeek(newBody.startTime, j)
+                        console.log(j)
+                        console.log(newStartTime)
 
                         const newWeekBody = {
                             name: newBody.name,
