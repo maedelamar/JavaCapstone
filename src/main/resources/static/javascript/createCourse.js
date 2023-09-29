@@ -116,7 +116,6 @@ function handleWeeklyOption(willShow) {
 
 function handleDailyOption(willShow) {
     daily = willShow
-    console.log(daily)
 
     if (willShow) {
         dailyFormGroup.innerHTML = `
@@ -291,7 +290,7 @@ async function handleCourseCreation(e) {
             }
         }
 
-        location.replace("/")
+        // location.replace("/")
     }
 }
 
