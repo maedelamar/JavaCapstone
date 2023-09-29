@@ -39,6 +39,10 @@
     height: 80vh;
 }
 
+#calendar-container h4 {
+    margin-top: 3vh;
+}
+
 #calendar {
     margin: auto;
 }
