@@ -90,9 +90,9 @@ function addDay(datetime, numberOfDays, spacing) {
     let date = newDate.getDate()
 
     date += numberOfDays + spacing
-    if (date > new Date(year, month, 0).getDate()) {
+    while (date > new Date(year, month, 0).getDate()) {
         date -= new Date(year, month, 0).getDate()
-        month += 1
+        month++
         if (month > 12) {
             month -= 12
             year++
@@ -109,9 +109,9 @@ function addWeek(datetime, numberOfWeeks) {
     let date = newDate.getDate()
 
     date += numberOfWeeks * 7
-    if (date > new Date(year, month, 0).getDate()) {
+    while (date > new Date(year, month, 0).getDate()) {
         date -= new Date(year, month, 0).getDate()
-        month += 1
+        month++
         if (month > 12) {
             month -= 12
             year++
