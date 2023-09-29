@@ -252,9 +252,10 @@ async function handleCourseCreation(e) {
 
         if (daily) {
             const numberOfDays = document.getElementById('number-of-days-input').value
+            const spacing = +document.getElementById('spacing-input').value
 
             for (let i = 1; i < numberOfDays; i++) {
-                const newStartTime = addDay(bodyObj.startTime, i, +document.getElementById('spacing-input').value)
+                const newStartTime = addDay(bodyObj.startTime, i, spacing)
 
                 const newBody = {
                     name: bodyObj.name,
@@ -277,7 +278,7 @@ async function handleCourseCreation(e) {
                 if (weekly && dayRes.status === 200) {
                     const numberOfWeeks = document.getElementById('number-of-weeks-input').value
 
-                    for (let j = 1; j <= numberOfWeeks; j++) {
+                    for (let j = 1; j < numberOfWeeks; j++) {
                         const newWeekStartTime = addWeek(newBody.startTime, j)
 
                         const newWeekBody = {
