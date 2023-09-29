@@ -254,7 +254,7 @@ async function handleCourseCreation(e) {
             const numberOfDays = document.getElementById('number-of-days-input').value
 
             for (let i = 1; i < numberOfDays; i++) {
-                const newStartTime = addDay(bodyObj.startTime, i, +document.getElementById('spacing-input'))
+                const newStartTime = addDay(bodyObj.startTime, i, +document.getElementById('spacing-input').value)
 
                 const newBody = {
                     name: bodyObj.name,
