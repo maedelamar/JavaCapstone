@@ -228,7 +228,7 @@ async function handleCourseCreation(e) {
         imageURL = 'https://images.pond5.com/male-tutor-teaching-university-students-footage-040447646_iconl.jpeg'
     }
 
-    getHighestCourseNumber()
+    await getHighestCourseNumber()
 
     const bodyObj = {
         name: nameInput.value,
