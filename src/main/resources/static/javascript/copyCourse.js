@@ -320,7 +320,8 @@ async function handleCourseCreation(e) {
                     }
                 }
             }
-        } else if (weekly) {
+        }
+        if (weekly) {
             const numberOfWeeks = document.getElementById('number-of-weeks-input').value
 
             for (let i = 1; i < numberOfWeeks; i++) {

@@ -327,7 +327,7 @@ async function handleCourseCreation(e) {
             }
         }
 
-        // location.replace("/")
+        location.replace("/")
     }
 }
 
