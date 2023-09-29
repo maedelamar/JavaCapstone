@@ -17,7 +17,7 @@ const dailySpacingGroup = document.getElementById('daily-spacing-group')
 
 document.getElementById('course-error-text').innerHTML = ''
 
-let highestCourseNumber = 0;
+let highestCourseNumber = 0
 let weekly = false
 let daily = false
 
@@ -229,6 +229,7 @@ async function handleCourseCreation(e) {
     }
 
     await getHighestCourseNumber()
+    console.log(highestCourseNumber)
 
     const bodyObj = {
         name: nameInput.value,
