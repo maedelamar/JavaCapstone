@@ -65,9 +65,9 @@ function calculateEndTime(startTime, duration) {
 
 function addDay(datetime, numberOfDays, spacing) {
     let newDate = new Date(datetime)
-    let year = newDate.getFullYear()
-    let month = newDate.getMonth() + 1
-    let date = newDate.getDate()
+    let year = +newDate.getFullYear()
+    let month = +newDate.getMonth() + 1
+    let date = +newDate.getDate()
 
     date += numberOfDays + spacing
     console.log(date)
@@ -85,9 +85,9 @@ function addDay(datetime, numberOfDays, spacing) {
 
 function addWeek(datetime, numberOfWeeks) {
     let newDate = new Date(datetime)
-    let year = newDate.getFullYear()
-    let month = newDate.getMonth() + 1
-    let date = newDate.getDate()
+    let year = +newDate.getFullYear()
+    let month = +newDate.getMonth() + 1
+    let date = +newDate.getDate()
 
     date += numberOfWeeks * 7
     while (date > new Date(year, month, 0).getDate()) {
