@@ -78,6 +78,8 @@ function addDay(datetime, numberOfDays, spacing) {
             year++
         }
     }
+
+    return `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}T${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}`
 }
 
 function addWeek(datetime, numberOfWeeks) {

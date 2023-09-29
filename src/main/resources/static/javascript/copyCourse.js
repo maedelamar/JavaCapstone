@@ -98,6 +98,8 @@ function addDay(datetime, numberOfDays, spacing) {
             year++
         }
     }
+
+    return `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}T${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}`
 }
 
 function addWeek(datetime, numberOfWeeks) {
@@ -231,9 +233,11 @@ async function handleCourseCreation(e) {
         alert("Course Created!")
 
         if (daily) {
+            console.log("Making daily course")
             const numberOfDays = document.getElementById('number-of-days-input').value
 
             for (let i = 1; i < numberOfDays; i++) {
+                console.log(i)
                 const newStartTime = addDay(bodyObj.startTime, i, document.getElementById('spacing-input').value)
 
                 const newBody = {
@@ -255,6 +259,7 @@ async function handleCourseCreation(e) {
                 .catch(err => console.log(err))
 
                 if (weekly && dayRes.status === 200) {
+                    console.log("Making course for next week")
                     const numberOfWeeks = document.getElementById('number-of-weeks-input').value
 
                     for (let j = 1; j < numberOfWeeks; j++) {
