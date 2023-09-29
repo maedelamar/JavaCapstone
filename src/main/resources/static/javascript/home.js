@@ -376,31 +376,29 @@ async function handleAddInstructor(e) {
         method: "GET",
         headers
     })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-
+    .then(res => console.log(res.json()))
+    .then(async function(data) {
         if (data.permission >= 1) {
             alert("This user already has instructor privileges.")
             return
         }
 
-        // const bodyObj = {
-        //     id: data.id,
-        //     permission: 1
-        // }
+        const bodyObj = {
+            id: data.id,
+            permission: 1
+        }
 
-        // const response = await fetch(`${baseURL}/users`, {
-        //     method: "PUT",
-        //     body: JSON.stringify(bodyObj),
-        //     headers
-        // })
-        // .catch(err => console.log(err))
+        const response = await fetch(`${baseURL}/users`, {
+            method: "PUT",
+            body: JSON.stringify(bodyObj),
+            headers
+        })
+        .catch(err => console.log(err))
 
-        // if (response.status === 200) {
-        //     alert(`${data.firstName} ${data.lastName} is now an instructor.`)
-        //     location.reload()
-        // }
+        if (response.status === 200) {
+            alert(`${data.firstName} ${data.lastName} is now an instructor.`)
+            location.reload()
+        }
     })
     .catch(err => console.log(err))
 }
