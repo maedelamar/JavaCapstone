@@ -252,10 +252,9 @@ async function handleCourseCreation(e) {
 
         if (daily) {
             const numberOfDays = document.getElementById('number-of-days-input').value
-            const spacing = +document.getElementById('spacing-input').value
 
             for (let i = 1; i < numberOfDays; i++) {
-                const newStartTime = addDay(bodyObj.startTime, i, spacing)
+                const newStartTime = addDay(bodyObj.startTime, i, +document.getElementById('spacing-input'))
 
                 const newBody = {
                     name: bodyObj.name,
@@ -273,33 +272,34 @@ async function handleCourseCreation(e) {
                     body: JSON.stringify(newBody),
                     headers
                 })
-                .catch(err => console.log(err))
-
-                if (weekly && dayRes.status === 200) {
-                    const numberOfWeeks = document.getElementById('number-of-weeks-input').value
-
-                    for (let j = 1; j < numberOfWeeks; j++) {
-                        const newWeekStartTime = addWeek(newBody.startTime, j)
-
-                        const newWeekBody = {
-                            name: newBody.name,
-                            description: newBody.description,
-                            number: bodyObj.number,
-                            imageURL: newBody.imageURL,
-                            size: newBody.size,
-                            startTime: newWeekStartTime,
-                            endTime: calculateEndTime(newWeekStartTime, durationInput.value),
-                            location: newBody.location
+                .then(async function() {
+                    if (weekly) {
+                        const numberOfWeeks = document.getElementById('number-of-weeks-input').value
+    
+                        for (let j = 1; j < numberOfWeeks; j++) {
+                            const newWeekStartTime = addWeek(newBody.startTime, j)
+    
+                            const newWeekBody = {
+                                name: newBody.name,
+                                description: newBody.description,
+                                number: bodyObj.number,
+                                imageURL: newBody.imageURL,
+                                size: newBody.size,
+                                startTime: newWeekStartTime,
+                                endTime: calculateEndTime(newWeekStartTime, durationInput.value),
+                                location: newBody.location
+                            }
+    
+                            await fetch(`${baseURL}/${userId}`, {
+                                method: "POST",
+                                body: JSON.stringify(newWeekBody),
+                                headers
+                            })
+                            .catch(err => console.log(err))
                         }
-
-                        await fetch(`${baseURL}/${userId}`, {
-                            method: "POST",
-                            body: JSON.stringify(newWeekBody),
-                            headers
-                        })
-                        .catch(err => console.log(err))
                     }
-                }
+                })
+                .catch(err => console.log(err))
             }
         } else if (weekly) {
             const numberOfWeeks = document.getElementById('number-of-weeks-input').value

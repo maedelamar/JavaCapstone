@@ -269,7 +269,6 @@ async function handleCourseCreation(e) {
         alert("Course Created!")
 
         if (daily) {
-            console.log("Making daily course")
             const numberOfDays = document.getElementById('number-of-days-input').value
 
             for (let i = 1; i < numberOfDays; i++) {
