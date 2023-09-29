@@ -68,9 +68,9 @@ function addDay(datetime, numberOfDays, spacing) {
     let year = newDate.getFullYear()
     let month = newDate.getMonth() + 1
     let date = newDate.getDate()
-    console.log(date)
 
     date += numberOfDays + spacing
+    console.log(date)
     while (date > new Date(year, month, 0).getDate()) {
         date -= new Date(year, month, 0).getDate()
         month++
