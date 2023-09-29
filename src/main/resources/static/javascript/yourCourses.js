@@ -141,6 +141,8 @@ function getCoursesWhereUserIsStudent(students) {
 }
 
 async function displayYourCourses(courses) {
+    courses.reverse()
+
     if (courses.length === 0) {
         document.getElementById('your-course-section').innerHTML = `
             <h4>You have no upcoming courses.</h4>
