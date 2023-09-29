@@ -376,7 +376,7 @@ async function handleAddInstructor(e) {
         method: "GET",
         headers
     })
-    .then(res => console.log(res.json()))
+    .then(res => res.json())
     .then(async function(data) {
         if (data.permission >= 1) {
             alert("This user already has instructor privileges.")
