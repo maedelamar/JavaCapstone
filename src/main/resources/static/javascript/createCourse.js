@@ -33,6 +33,12 @@ async function getHighestCourseNumber() {
 
 function calculateEndTime(startTime, duration) {
     const time = startTime.split("T")
+
+    const endDateArr = time[0].split('-')
+    let endYear = +endDateArr[0]
+    let endMonth = +endDateArr[1]
+    let endDate = +endDateArr[2]
+
     const endTimeArr = time[1].split(":")
     let endTimeHour = +endTimeArr[0]
     let endTimeMinute = +endTimeArr[1]
@@ -40,6 +46,21 @@ function calculateEndTime(startTime, duration) {
     while (duration >= 60) {
         endTimeHour++
         duration -= 60
+
+        if (endTimeHour >= 24) {
+            endTimeHour -= 24
+            
+            endDate++
+            if (endDate > new Date(endYear, endMonth, 0)) {
+                endDate -= new Date(endYear, endMonth, 0)
+
+                endMonth++
+                if (endMonth > 12) {
+                    endMonth -= 12
+                    endYear++
+                }
+            }
+        }
     }
 
     while (duration > 0) {
@@ -49,6 +70,21 @@ function calculateEndTime(startTime, duration) {
         if (endTimeMinute === 60) {
             endTimeHour++
             endTimeMinute = 0
+
+            if (endTimeHour >= 24) {
+                endTimeHour -= 24
+                
+                endDate++
+                if (endDate > new Date(endYear, endMonth, 0)) {
+                    endDate -= new Date(endYear, endMonth, 0)
+    
+                    endMonth++
+                    if (endMonth > 12) {
+                        endMonth -= 12
+                        endYear++
+                    }
+                }
+            }
         }
     }
 
@@ -60,7 +96,7 @@ function calculateEndTime(startTime, duration) {
         endTimeMinute = String(endTimeMinute).padStart(2, '0')
     }
 
-    return time[0] + 'T' + endTimeHour + ':' + endTimeMinute
+    return `${endYear}-${String(endMonth).padStart(2, '0')}-${String(endDate).padStart(2, '0')}T${endTimeHour}:${endTimeMinute}`
 }
 
 function addDay(datetime, numberOfDays, spacing) {
@@ -70,7 +106,6 @@ function addDay(datetime, numberOfDays, spacing) {
     let date = newDate.getDate()
 
     date += numberOfDays + spacing
-    console.log(date)
     while (date > new Date(year, month, 0).getDate()) {
         date -= new Date(year, month, 0).getDate()
         month++
