@@ -65,12 +65,9 @@ function calculateEndTime(startTime, duration) {
 
 function addDay(datetime, numberOfDays, spacing) {
     let newDate = new Date(datetime)
-    let year = +newDate.getFullYear()
-    let month = +newDate.getMonth() + 1
-    let date = +newDate.getDate()
-    console.log(typeof date)
-    console.log(typeof numberOfDays)
-    console.log(typeof spacing)
+    let year = newDate.getFullYear()
+    let month = newDate.getMonth() + 1
+    let date = newDate.getDate()
 
     date += numberOfDays + spacing
     console.log(date)
@@ -88,9 +85,9 @@ function addDay(datetime, numberOfDays, spacing) {
 
 function addWeek(datetime, numberOfWeeks) {
     let newDate = new Date(datetime)
-    let year = +newDate.getFullYear()
-    let month = +newDate.getMonth() + 1
-    let date = +newDate.getDate()
+    let year = newDate.getFullYear()
+    let month = newDate.getMonth() + 1
+    let date = newDate.getDate()
 
     date += numberOfWeeks * 7
     while (date > new Date(year, month, 0).getDate()) {
@@ -222,7 +219,7 @@ async function handleCourseCreation(e) {
             const numberOfDays = document.getElementById('number-of-days-input').value
 
             for (let i = 1; i < numberOfDays; i++) {
-                const newStartTime = addDay(bodyObj.startTime, i, document.getElementById('spacing-input').value)
+                const newStartTime = addDay(bodyObj.startTime, i, +document.getElementById('spacing-input').value)
 
                 const newBody = {
                     name: bodyObj.name,
