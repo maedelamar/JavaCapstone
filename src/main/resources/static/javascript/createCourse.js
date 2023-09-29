@@ -277,10 +277,8 @@ async function handleCourseCreation(e) {
                 if (weekly && dayRes.status === 200) {
                     const numberOfWeeks = document.getElementById('number-of-weeks-input').value
 
-                    for (let j = 1; j < numberOfWeeks; j++) {
+                    for (let j = 1; j <= numberOfWeeks; j++) {
                         const newWeekStartTime = addWeek(newBody.startTime, j)
-                        console.log(j)
-                        console.log(newStartTime)
 
                         const newWeekBody = {
                             name: newBody.name,
