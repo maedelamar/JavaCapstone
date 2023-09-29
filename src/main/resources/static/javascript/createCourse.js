@@ -11,11 +11,15 @@ if (userId < 1) {
 const createCourseForm = document.getElementById('create-course-form')
 const repeatingWeeklyCheck = document.getElementById('course-repeating-weekly-check')
 const weeklyFormGroup = document.getElementById('weekly-form-group')
+const repeatingDailyCheck = document.getElementById('course-repeating-daily-check')
+const dailyFormGroup = document.getElementById('daily-form-group')
+const dailySpacingGroup = document.getElementById('daily-spacing-group')
 
 document.getElementById('course-error-text').innerHTML = ''
 
 let highestCourseNumber = 0;
 let weekly = false
+let daily = false
 
 async function getHighestCourseNumber() {
     await fetch(`${baseURL}/number/highest`, {
@@ -59,6 +63,23 @@ function calculateEndTime(startTime, duration) {
     return time[0] + 'T' + endTimeHour + ':' + endTimeMinute
 }
 
+function addDay(datetime, numberOfDays, spacing) {
+    let newDate = new Date(datetime)
+    let year = newDate.getFullYear()
+    let month = newDate.getMonth() + 1
+    let date = newDate.getDate()
+
+    date += numberOfDays + spacing
+    if (date > new Date(year, month, 0).getDate()) {
+        date -= new Date(year, month, 0).getDate()
+        month += 1
+        if (month > 12) {
+            month -= 12
+            year++
+        }
+    }
+}
+
 function addWeek(datetime, numberOfWeeks) {
     let newDate = new Date(datetime)
     let year = newDate.getFullYear()
@@ -88,6 +109,25 @@ function handleWeeklyOption(willShow) {
         `
     } else {
         weeklyFormGroup.innerHTML = ''
+    }
+}
+
+function handleDailyOption(willShow) {
+    daily = willShow
+
+    if (willShow) {
+        dailyFormGroup.innerHTML = `
+            <label for="number-of-days-input">For how many days? </label>
+            <input type="number" id="number-of-days-input">
+        `
+
+        dailySpacingGroup.innerHTML = `
+            <label for="spacing-input">Spacing Between Days: </label>
+            <input type="number" id="spacing-input">
+        `
+    } else {
+        dailyFormGroup.innerHTML = ''
+        dailySpacingGroup.innerHTML = ''
     }
 }
 
@@ -172,7 +212,57 @@ async function handleCourseCreation(e) {
     if (response.status === 200) {
         alert("Course Created!")
 
-        if (weekly) {
+        if (daily) {
+            const numberOfDays = document.getElementById('number-of-days-input').value
+
+            for (let i = 1; i < numberOfDays; i++) {
+                const newStartTime = addDay(bodyObj.startTime, i, document.getElementById('spacing-input').value)
+
+                const newBody = {
+                    name: bodyObj.name,
+                    description: bodyObj.description,
+                    number: bodyObj.number,
+                    imageURL: bodyObj.imageURL,
+                    size: bodyObj.size,
+                    startTime: newStartTime,
+                    endTime: calculateEndTime(newStartTime, durationInput.value),
+                    location: bodyObj.location
+                }
+
+                const dayRes = await fetch(`${baseURL}/${userId}`, {
+                    method: "POST",
+                    body: JSON.stringify(newBody),
+                    headers
+                })
+                .catch(err => console.log(err))
+
+                if (weekly && dayRes.status === 200) {
+                    const numberOfWeeks = document.getElementById('number-of-weeks-input').value
+
+                    for (let j = 1; j < numberOfWeeks; j++) {
+                        const newWeekStartTime = addWeek(newBody.startTime, j)
+
+                        const newWeekBody = {
+                            name: newBody.name,
+                            description: newBody.description,
+                            number: bodyObj.number,
+                            imageURL: newBody.imageURL,
+                            size: newBody.size,
+                            startTime: newWeekStartTime,
+                            endTime: calculateEndTime(newWeekStartTime, durationInput.value),
+                            location: newBody.location
+                        }
+
+                        await fetch(`${baseURL}/${userId}`, {
+                            method: "POST",
+                            body: JSON.stringify(newWeekBody),
+                            headers
+                        })
+                        .catch(err => console.log(err))
+                    }
+                }
+            }
+        } else if (weekly) {
             const numberOfWeeks = document.getElementById('number-of-weeks-input').value
 
             for (let i = 1; i < numberOfWeeks; i++) {
@@ -203,5 +293,6 @@ async function handleCourseCreation(e) {
 }
 
 repeatingWeeklyCheck.addEventListener('click', () => handleWeeklyOption(repeatingWeeklyCheck.checked))
+repeatingDailyCheck.addEventListener('click', () => handleDailyOption(repeatingDailyCheck.checked))
 
 createCourseForm.addEventListener('submit', handleCourseCreation)
