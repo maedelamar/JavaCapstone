@@ -95,6 +95,7 @@ function renderCalendar() {
     for (let i = firstDayOfMonth; i > 0; i--) {
         document.getElementById(`r1-c${firstDayOfMonth - i + 1}`).textContent = lastDateOfLastMonth - i + 1
         document.getElementById(`r1-c${firstDayOfMonth - i + 1}`).style.color = 'gray'
+        document.getElementById(`r1-c${firstDayOfMonth - i + 1}`).style.backgroundColor = '#b5dcdd'
     }
 
     let currentRow = 1
@@ -124,6 +125,7 @@ function renderCalendar() {
     while (currentRow < 7) {
         document.getElementById(`r${currentRow}-c${dayCounter + 1}`).textContent = nextMonthCounter
         document.getElementById(`r${currentRow}-c${dayCounter + 1}`).style.color = 'gray'
+        document.getElementById(`r1-c${firstDayOfMonth - i + 1}`).style.backgroundColor = '#b5dcdd'
 
         dayCounter++
         nextMonthCounter++
