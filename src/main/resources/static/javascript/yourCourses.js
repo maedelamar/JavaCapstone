@@ -1,4 +1,4 @@
-const baseURL = 'http://18.223.122.66:8080/api/v1'
+const baseURL = 'http://3.15.210.40:8080/api/v1'
 const headers = {"Content-Type":"application/json"}
 
 let userId = 0
